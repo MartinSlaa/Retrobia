@@ -1,5 +1,4 @@
 import time
-from tank_tut import tank_main
 
 def main():
     while True:
@@ -10,7 +9,6 @@ def main():
 
         if(choice == "1"):
             print("\n\nStarting [Game Name]...")
-            tank_main.main()
             printLines(50)
             print("\n\nExiting [Game Name]...")
             printLines(50)
