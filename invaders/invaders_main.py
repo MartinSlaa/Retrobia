@@ -4,8 +4,9 @@ import time
 import random
 pygame.font.init()
 
+os.environ['SDL_VIDEO_CENTERED'] = '1'
 # define window size
-WIDTH, HEIGHT = 750, 750
+WIDTH, HEIGHT = 750, 850
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # player ship
