@@ -190,7 +190,11 @@ class UserInterface():
             self.clock.tick(60)
 
 
-userInterface = UserInterface()
-userInterface.run()
+def main():
+    userInterface = UserInterface()
+    userInterface.run()
 
-pygame.quit()
+    pygame.quit()
+
+
+main()
