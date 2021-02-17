@@ -30,8 +30,9 @@ BACKGROUND = pygame.transform.scale(pygame.image.load(os.path.join("assets", "bl
 BOLT_LASER_BLUE = pygame.image.load(os.path.join("assets", "blasterbolt.png"))
 
 
-# class ship abstract method which other ships inherits from
 class Ship:
+    """abstract class which other ships inherits from"""
+
     def __init__(self, pos_x, pos_y, health=100):
         self.pos_x = pos_x
         self.pos_y = pos_y
@@ -65,17 +66,18 @@ class PlayerShip(Ship):
 class Enemy(Ship):
     SHIP_COLOR = {
                   "blue": (ENEMY_SHIP_1, BOLT_LASER_BLUE),
-                  "red" : (ENEMY_SHIP_2, BOLT_LASER_BLUE),
+                  "red": (ENEMY_SHIP_2, BOLT_LASER_BLUE),
                   "green": (BOSS_SHIP, BOLT_LASER_BLUE)
                  }
 
-    def __init__(self, pos_x, pos_y, color, health = 100):
+    def __init__(self, pos_x, pos_y, color, health=100):
         super().__init__(pos_x, pos_y, health)
         self.ship_image, self.bolt_image = self.SHIP_COLOR[color]
         self.mask = pygame.mask.from_surface(self.ship_image)
 
     def move(self, velocity):
         self.pos_y += velocity
+
 
 # main program
 def main():
@@ -94,7 +96,7 @@ def main():
     lost_font = pygame.font.SysFont("impact", 80)
 
     # Player variables
-    player_velocity = 5
+    player_velocity = 10
     player = PlayerShip(325, 750)
 
     # enemy variables
@@ -145,7 +147,7 @@ def main():
             level += 1
             wave_length += 5
             for i in range(wave_length):
-                enemy = Enemy(random.randrange(50, WIDTH - 100), random.randrange(- 1500, - 300),
+                enemy = Enemy(random.randrange(100, WIDTH - 200), random.randrange(- 1500, - 300),
                               random.choice(["red", "blue"]))
                 enemies.append(enemy)
 
