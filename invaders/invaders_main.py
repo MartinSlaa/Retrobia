@@ -1,9 +1,8 @@
 # importing necessary packages
 import pygame
 import os
-import time
 import random
-from abc import abstractmethod
+
 
 # initializes the font module in pygame
 pygame.font.init()
