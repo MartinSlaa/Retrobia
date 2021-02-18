@@ -29,7 +29,7 @@ BOLT_LASER_BLUE = pygame.image.load(os.path.join("assets", "blasterbolt.png"))
 
 
 class Ship:
-    """abstract class which other ships inherits from"""
+    """super class which other ships inherits from"""
 
     COOLDOWN = 15
 
@@ -85,6 +85,7 @@ class PlayerShip(Ship):
         self.mask = pygame.mask.from_surface(self.ship_image)
         self.max_health = health
 
+    # overrides move bolts function from ship class
     def move_bolts(self, velocity, objs):
         self.cooldowns()
         for bolt in self.bolts:
