@@ -7,7 +7,6 @@ from abc import abstractmethod
 
 # initializes the font module in pygame
 pygame.font.init()
-
 # Make sure the game starts at the center of screen
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
@@ -45,7 +44,7 @@ class Ship:
         self.cooldown = 0
 
     def draw(self, window):
-        window.blit(self.ship_image, (self.pos_x - 39, self.pos_y))
+        window.blit(self.ship_image, (self.pos_x , self.pos_y))
         for bolt in self.bolts:
             bolt.draw(window)
 
@@ -57,7 +56,7 @@ class Ship:
 
     def shoot(self):
         if self.cooldown == 0:
-            bolt = Bolt(self.pos_x, self.pos_y, self.bolt_image)
+            bolt = Bolt(self.pos_x + 39, self.pos_y, self.bolt_image)
             self.bolts.append(bolt)
             self.cooldown = 1
 
@@ -105,9 +104,10 @@ class PlayerShip(Ship):
         self.health_bar(window)
 
     def health_bar(self, window):
-        pygame.draw.rect(window, (255, 0, 0), (self.pos_x - 35, self.pos_y + self.ship_image.get_height(),
+        pygame.draw.rect(window, (255, 0, 0), (self.pos_x, self.pos_y + self.ship_image.get_height(),
                                                self.ship_image.get_width(), 10))
-        pygame.draw.rect(window, (0, 255, 0), (self.pos_x - 35, self.pos_y + self.ship_image.get_height(), self.ship_image.get_width() * (self.health / self.max_health), 10))
+        pygame.draw.rect(window, (0, 255, 0), (self.pos_x, self.pos_y + self.ship_image.get_height(),
+                                               self.ship_image.get_width() * (self.health / self.max_health), 10))
 
 
 # Enemy class that inherits from the ship class
@@ -123,11 +123,18 @@ class Enemy(Ship):
         self.ship_image, self.bolt_image = self.SHIP_COLOR[color]
         self.mask = pygame.mask.from_surface(self.ship_image)
 
+    def shoot(self):
+        if self.cooldown == 0:
+            bolt = Bolt(self.pos_x + 80, self.pos_y + 300, self.bolt_image)
+            self.bolts.append(bolt)
+            self.cooldown = 1
+
     def move(self, velocity):
         self.pos_y += velocity
 
 
 class Bolt:
+    """All blots uses these functions"""
     def __init__(self, pos_x, pos_y, image):
         self.pos_x = pos_x
         self.pos_y = pos_y
@@ -162,7 +169,7 @@ def main():
     fps = 60
     level = 0
     lives = 5
-    score = 0
+    score = -100
     clock = pygame.time.Clock()
 
     # declaring the fonts used in the game
@@ -207,7 +214,7 @@ def main():
         # Display lost message
         if lost:
             lost_label = lost_font.render("Game Over!", 1, (255, 255, 255))
-            WIN.blit(lost_label, (WIDTH / 2 - lost_label.get_width() / 2, 350))
+            WIN.blit(lost_label, (200, 350))
 
         # update window
         pygame.display.update()
@@ -215,14 +222,16 @@ def main():
     # While loop while game is running
     while run:
         clock.tick(fps)
+        redraw_window()
 
         # Player looses if health is zero or lost all lives
         if lives <= 0 or player.health <= 0:
             lost = True
             lost_count += 1
 
+        # used to define how long lost screen is showed
         if lost:
-            if lost_count > fps * 5:
+            if lost_count > fps * 3:
                 run = False
             else:
                 continue
@@ -240,7 +249,7 @@ def main():
         # if player exit game, terminate program by setting run to false
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                run = False
 
         # defining player movement and that player ship cannot move off screen
         keys = pygame.key.get_pressed()
@@ -252,7 +261,7 @@ def main():
             player.pos_y -= player_velocity
         if keys[pygame.K_s] and player.pos_y + player_velocity + player.get_height() + 10 < HEIGHT:  # move down
             player.pos_y += player_velocity
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_SPACE]:  # player shoots bolt
             player.shoot()
 
         # defining enemy movement
@@ -260,34 +269,46 @@ def main():
             enemy.move(enemy_velocity)
             enemy.move_bolts(bolt_velocity, player)
 
-            if random.randrange(0, 60) == 1:
+            # random timer for enemies to shoot
+            if random.randrange(0, 120) == 1:
                 enemy.shoot()
 
+            # define what happens when player and enemy ship collides. player looses 10 health
             if collide(enemy, player):
                 player.health -= 10
-                enemies.remove((enemy))
+                enemies.remove(enemy)
 
+            # If enemies get to the bottom of screen, lose 1 life and remove enemy ship
             if enemy.pos_y + enemy.get_height() > HEIGHT:
                 lives -= 1
                 enemies.remove(enemy)
 
+        # check if player bolts hits an enemy and removes bolt and enemy
         player.move_bolts(-bolt_velocity, enemies)
-        redraw_window()
+
 
 def menu():
-    title_font = pygame.font.SysFont("comicsans", 70)
+    title_font = pygame.font.SysFont("comicsans", 90)
+    high_score_font = pygame.font.SysFont("comicsans", 60)
     run = True
     while run:
+        # show menu
         WIN.blit(BACKGROUND, (0, 0))
-        title_label = title_font.render("Press the mouse to begin...", 1, (255, 255, 255))
-        WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2, 350))
+        title_label = title_font.render("Press space to begin!", 1, (255, 255, 255))
+        WIN.blit(title_label, (60, 200))
+
+        high_score_label = high_score_font.render("Press mouse to show high scores", 1, (255, 255, 255))
+        WIN.blit(high_score_label, (50, 350))
+
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.KEYDOWN:
                 main()
 
     pygame.quit()
+
+
 # run program
 menu()
