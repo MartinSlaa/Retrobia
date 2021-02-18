@@ -1,24 +1,67 @@
-import sys, random
+import random
+import sys
+import time
 import pygame
+
 
 pygame.init()
 
+font = pygame.font.SysFont('comicsansms', 30)
+
 # Window size
-WIDTH = 750
-HEIGHT = 850
+WIDTH = 600
+HEIGHT = 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 pygame.display.set_caption('Ssssnake')
 
+# Menu Function
+def main_menu():
+    while 1:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                main()
+        WIN.fill((0, 0, 0))
+
+        main_menu_message = font.render('Press anywhere to start the game', True, (75, 139, 59))
+        font_pos = main_menu_message.get_rect(center=(WIDTH//2, HEIGHT//2))
+        WIN.blit(main_menu_message, font_pos)
+        pygame.display.update()
+
+# Game Over Screen
+def game_over(score):
+    while 1:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        WIN.fill((0, 0, 0))
+
+        game_over_message = font.render('You Lost', True, (255, 0, 0))
+        game_over_score = font.render(f'Your score was {score}', True, (255, 255, 255))
+        font_pos_message = game_over_message.get_rect(center=(WIDTH//2, HEIGHT//2))
+        font_pos_score = game_over_score.get_rect(center=(WIDTH//2, HEIGHT//2+40))
+        WIN.blit(game_over_message, font_pos_message)
+        WIN.blit(game_over_score, font_pos_score)
+        pygame.display.update()
+
+        time.sleep(5)
+        main_menu()
+
+
 # Main Function
 def main():
     clock = pygame.time.Clock()
-    snake_pos = [200,70]
-    snake_body = [[200,70], [200-10,70], [200-(2*10),70]]
+    snake_pos = [200, 70]
+    snake_body = [[200, 70], [200 - 10, 70], [200 - (2 * 10), 70]]
     direction = 'right'
     score = 0
-    fruit_pos = [0,0]
+    fruit_pos = [0, 0]
     fruit_spawn = True
+
 
     # Game loop
     while 1:
@@ -36,10 +79,10 @@ def main():
                 direction = 'left'
             if (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and direction != 'left':
                 direction = 'right'
-        WIN.fill((0,0,0))
+        WIN.fill((0, 0, 0))
 
         for square in snake_body:
-            pygame.draw.rect(WIN, (255,255,0), (square[0], square[1],10,10))
+            pygame.draw.rect(WIN, (255, 255, 0), (square[0], square[1], 10, 10))
 
         # Snake direction control
         if direction == 'right':
@@ -61,24 +104,32 @@ def main():
 
         for square in snake_body[:-1]:
             if pygame.Rect(square[0], square[1], 10, 10).colliderect(pygame.Rect(snake_pos[0], snake_pos[1], 10, 10)):
-                sys.exit()
+                game_over(score)
 
         # Add random fruit spawn
         if fruit_spawn:
-            fruit_pos = [random.randrange(40, WIDTH-40), random.randrange(40, HEIGHT-40)]
+            fruit_pos = [random.randrange(40, WIDTH - 40), random.randrange(40, HEIGHT - 40)]
             fruit_spawn = False
-        pygame.draw.rect(WIN,(138,43,226), (fruit_pos[0], fruit_pos[1], 10, 10))
+        pygame.draw.rect(WIN, (138, 43, 226), (fruit_pos[0], fruit_pos[1], 10, 10))
 
         # Let snake eat fruit
-        if pygame.Rect(snake_pos[0], snake_pos[1],10,10). colliderect(pygame.Rect(fruit_pos[0],fruit_pos[1],10,10)):
+        if pygame.Rect(snake_pos[0], snake_pos[1], 10, 10).colliderect(pygame.Rect(fruit_pos[0], fruit_pos[1], 10, 10)):
             fruit_spawn = True
             score += 5
+
+        # Score display
+        score_font = font.render(f'Score: {score}', True, (75, 139, 59))
+        font_pos = score_font.get_rect(center=(WIDTH//2-40, 30))
+        WIN.blit(score_font, font_pos)
+
         pygame.display.update()
         clock.tick(25)
 
         # Exit game if snake hits window edge
-        if snake_pos[0]+10 <=0 or snake_pos[0] >= WIDTH:
-            sys.exit()
-        if snake_pos[1]+10 <=0 or snake_pos[1] >= HEIGHT:
-            sys.exit()
-main()
+        if snake_pos[0] + 10 <= 0 or snake_pos[0] >= WIDTH:
+            game_over(score)
+        if snake_pos[1] + 10 <= 0 or snake_pos[1] >= HEIGHT:
+            game_over(score)
+
+
+main_menu()
