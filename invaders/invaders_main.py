@@ -33,6 +33,8 @@ BOLT_LASER_BLUE = pygame.image.load(os.path.join("assets", "blasterbolt.png"))
 class Ship:
     """abstract class which other ships inherits from"""
 
+    COOLDOWN = 15
+
     def __init__(self, pos_x, pos_y, health=100):
         self.pos_x = pos_x
         self.pos_y = pos_y
@@ -43,13 +45,37 @@ class Ship:
         self.cooldown = 0
 
     def draw(self, window):
-        window.blit(self.ship_image, (self.pos_x, self.pos_y))
+        window.blit(self.ship_image, (self.pos_x - 39, self.pos_y))
+        for bolt in self.bolts:
+            bolt.draw(window)
 
     def get_width(self):
         return self.ship_image.get_width()
 
     def get_height(self):
         return self.ship_image.get_height()
+
+    def shoot(self):
+        if self.cooldown == 0:
+            bolt = Bolt(self.pos_x, self.pos_y, self.bolt_image)
+            self.bolts.append(bolt)
+            self.cooldown = 1
+
+    def cooldowns(self):
+        if self.cooldown >= self.COOLDOWN:
+            self.cooldown = 0
+        elif self.cooldown > 0:
+            self.cooldown += 1
+
+    def move_bolts(self, velocity, obj):
+        self.cooldowns()
+        for bolt in self.bolts:
+            bolt.move(velocity)
+            if bolt.off_screen(HEIGHT):
+                self.bolts.remove(bolt)
+            elif bolt.collision(obj):
+                obj.health -= 10
+                self.bolts.remove(bolt)
 
 
 # PLayer class that inherits from the ship class
@@ -61,14 +87,36 @@ class PlayerShip(Ship):
         self.mask = pygame.mask.from_surface(self.ship_image)
         self.max_health = health
 
+    def move_bolts(self, velocity, objs):
+        self.cooldowns()
+        for bolt in self.bolts:
+            bolt.move(velocity)
+            if bolt.off_screen(HEIGHT):
+                self.bolts.remove(bolt)
+            else:
+                for obj in objs:
+                    if bolt.collision(obj):
+                        objs.remove(obj)
+                        if bolt in self.bolts:
+                            self.bolts.remove(bolt)
+
+    def draw(self, window):
+        super().draw(window)
+        self.health_bar(window)
+
+    def health_bar(self, window):
+        pygame.draw.rect(window, (255, 0, 0), (self.pos_x - 35, self.pos_y + self.ship_image.get_height(),
+                                               self.ship_image.get_width(), 10))
+        pygame.draw.rect(window, (0, 255, 0), (self.pos_x - 35, self.pos_y + self.ship_image.get_height(), self.ship_image.get_width() * (self.health / self.max_health), 10))
+
 
 # Enemy class that inherits from the ship class
 class Enemy(Ship):
     SHIP_COLOR = {
-                  "blue": (ENEMY_SHIP_1, BOLT_LASER_BLUE),
-                  "red": (ENEMY_SHIP_2, BOLT_LASER_BLUE),
-                  "green": (BOSS_SHIP, BOLT_LASER_BLUE)
-                 }
+        "blue": (ENEMY_SHIP_1, BOLT_LASER_BLUE),
+        "red": (ENEMY_SHIP_2, BOLT_LASER_BLUE),
+        "green": (BOSS_SHIP, BOLT_LASER_BLUE)
+    }
 
     def __init__(self, pos_x, pos_y, color, health=100):
         super().__init__(pos_x, pos_y, health)
@@ -77,6 +125,32 @@ class Enemy(Ship):
 
     def move(self, velocity):
         self.pos_y += velocity
+
+
+class Bolt:
+    def __init__(self, pos_x, pos_y, image):
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+        self.image = image
+        self.mask = pygame.mask.from_surface(self.image)
+
+    def draw(self, window):
+        window.blit(self.image, (self.pos_x, self.pos_y))
+
+    def move(self, velocity):
+        self.pos_y += velocity
+
+    def off_screen(self, height):
+        return not height >= self.pos_y >= 0
+
+    def collision(self, box):
+        return collide(box, self)
+
+
+def collide(obj1, obj2):
+    offset_x = obj2.pos_x - obj1.pos_x
+    offset_y = obj2.pos_y - obj1.pos_y
+    return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) is not None
 
 
 # main program
@@ -95,6 +169,9 @@ def main():
     main_font = pygame.font.SysFont("lucidasans", 40)
     lost_font = pygame.font.SysFont("impact", 80)
 
+    # bolt variables
+    bolt_velocity = 10
+
     # Player variables
     player_velocity = 10
     player = PlayerShip(325, 750)
@@ -106,6 +183,7 @@ def main():
 
     # setting lost to false
     lost = False
+    lost_count = 0
 
     # Redraw function to draw UI and lost text
     def redraw_window():
@@ -117,7 +195,7 @@ def main():
         # Placement of lives, level and score on the screen
         WIN.blit(level_label, (5, 1))
         WIN.blit(lives_label, (5, 40))
-        WIN.blit(score_label, (WIDTH - level_label.get_width() - 15, 1))
+        WIN.blit(score_label, (WIDTH - level_label.get_width() - 75, 1))
 
         # draw the player ship on the window
         player.draw(WIN)
@@ -129,7 +207,7 @@ def main():
         # Display lost message
         if lost:
             lost_label = lost_font.render("Game Over!", 1, (255, 255, 255))
-            WIN.blit(lost_label, (WIDTH/2 - lost_label.get_width()/2, 350))
+            WIN.blit(lost_label, (WIDTH / 2 - lost_label.get_width() / 2, 350))
 
         # update window
         pygame.display.update()
@@ -141,20 +219,28 @@ def main():
         # Player looses if health is zero or lost all lives
         if lives <= 0 or player.health <= 0:
             lost = True
+            lost_count += 1
+
+        if lost:
+            if lost_count > fps * 5:
+                run = False
+            else:
+                continue
 
         # create random waves of enemies and move to next level if player kills all enemies
         if len(enemies) == 0:
             level += 1
-            wave_length += 5
+            score += 100
+            wave_length += 3
             for i in range(wave_length):
-                enemy = Enemy(random.randrange(100, WIDTH - 200), random.randrange(- 1500, - 300),
+                enemy = Enemy(random.randrange(500, WIDTH - 200), random.randrange(- 1500, - 200),
                               random.choice(["red", "blue"]))
                 enemies.append(enemy)
 
         # if player exit game, terminate program by setting run to false
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                pygame.quit()
 
         # defining player movement and that player ship cannot move off screen
         keys = pygame.key.get_pressed()
@@ -164,17 +250,44 @@ def main():
             player.pos_x += player_velocity
         if keys[pygame.K_w] and player.pos_y - player_velocity > 0:  # move up
             player.pos_y -= player_velocity
-        if keys[pygame.K_s] and player.pos_y + player_velocity + player.get_height() < HEIGHT:  # move down
+        if keys[pygame.K_s] and player.pos_y + player_velocity + player.get_height() + 10 < HEIGHT:  # move down
             player.pos_y += player_velocity
+        if keys[pygame.K_SPACE]:
+            player.shoot()
 
         # defining enemy movement
         for enemy in enemies:
             enemy.move(enemy_velocity)
+            enemy.move_bolts(bolt_velocity, player)
+
+            if random.randrange(0, 60) == 1:
+                enemy.shoot()
+
+            if collide(enemy, player):
+                player.health -= 10
+                enemies.remove((enemy))
+
             if enemy.pos_y + enemy.get_height() > HEIGHT:
                 lives -= 1
                 enemies.remove(enemy)
 
+        player.move_bolts(-bolt_velocity, enemies)
         redraw_window()
 
+def menu():
+    title_font = pygame.font.SysFont("comicsans", 70)
+    run = True
+    while run:
+        WIN.blit(BACKGROUND, (0, 0))
+        title_label = title_font.render("Press the mouse to begin...", 1, (255, 255, 255))
+        WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2, 350))
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                main()
+
+    pygame.quit()
 # run program
-main()
+menu()
