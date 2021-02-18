@@ -50,8 +50,8 @@ pygame.mouse.set_visible(False)
 font = pygame.font.SysFont(None, 48)
 
 #SOUNDS
-gameOverSound = pygame.mixer.Sound('gameover.wav')
-pygame.mixer.music.load('background.mp3')
+#gameOverSound = pygame.mixer.Sound('gameover.wav')
+#pygame.mixer.music.load('background.mp3')
 
 #IMAGES
 playerImage = pygame.image.load('player.png')
@@ -61,7 +61,7 @@ villainImage = pygame.image.load('villain.png')
 #Start Screen
 windowSurface.fill(BACKGROUNDCOLOR)
 drawText('SIDE-STEP', font, windowSurface, (WINDOWWIDTH / 3),
-    WINDOWHEIGHT / 3))
+         (WINDOWHEIGHT / 3))
 drawText ('Press any key to start!', font, windowSurface,
     (WINDOWWIDTH / 3) - 30, (WINDOWHEIGHT / 3) + 50)
 pygame.display.update()
@@ -77,6 +77,51 @@ while True:
     reverseCheat = slowCheat = False
     villainAddCounter = 0
     pygame.mixer.music.play(-1, 0.0)
+
+while True: # game loop runs while the game part is playing
+    score += 1 # Score increase
+
+    for event in pygame.event.get()
+        if event.type == QUIT:
+            terminate()
+
+        if even.type == KEYDOWN:
+            if event.key == K_z:
+                reverseCheat = True
+            if event.key == K_x:
+                slowCheat = True
+            if event.key == K_LEFT or event.key == K_a:
+                moveRight = False
+                moveLeft = True
+            if event.key == K_RIGHT or event.key ==K_d:
+                moveLEFT = False
+                moveRIGHT = True
+            if event.key == K_UP or event.key == K_w:
+                moveDOWN =False
+                moveUP = True
+            if event.key == K_DOWN or event.key == K_S:
+                moveUP = False
+                moveDown = True
+
+            if event.type == KEYUP:
+                if event.key == K_z:
+                    reverseCheat = False
+                    score = 0
+                if event.key == K_x:
+                    slowCheat = False
+                    score = 0
+                if event.key ==K_ESCAPE
+                    terminate()
+
+                if event.key == K_LEFT or event.key == K_a:
+                    moveLEFT = False
+                if event.key == K_RIGHT or event.key == K_d:
+                    moveRIGHT = False
+                if event.key == K_UP or event.key == K_w:
+                    moveUP = False
+                if event.key == K_DOWN or event.key == K_s:
+                    moveDOWN = False
+
 
 
 
