@@ -15,18 +15,18 @@ WIDTH, HEIGHT = 750, 1050
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Load images of enemy ships
-BOSS_SHIP = pygame.image.load(os.path.join("assets", "boss_ship.png"))
-ENEMY_SHIP_1 = pygame.image.load(os.path.join("assets", "enemy_ship1.png"))
-ENEMY_SHIP_2 = pygame.image.load(os.path.join("assets", "enemy_ship2.png"))
+BOSS_SHIP = pygame.image.load("invaders/assets/boss_ship.png")
+ENEMY_SHIP_1 = pygame.image.load("invaders/assets/enemy_ship1.png")
+ENEMY_SHIP_2 = pygame.image.load("invaders/assets/enemy_ship2.png")
 
 # load image of player ship
-FIGHTER_SHIP = pygame.image.load(os.path.join("assets", "fighter_ship.png"))
+FIGHTER_SHIP = pygame.image.load("invaders/assets/fighter_ship.png")
 
 # Loading background image
-BACKGROUND = pygame.transform.scale(pygame.image.load(os.path.join("assets", "blueNebula_1.png")), (WIDTH, HEIGHT))
+BACKGROUND = pygame.transform.scale(pygame.image.load("invaders/assets/blueNebula_1.png"), (WIDTH, HEIGHT))
 
 # Load lasers image
-BOLT_LASER_BLUE = pygame.image.load(os.path.join("assets", "blasterbolt.png"))
+BOLT_LASER_BLUE = pygame.image.load("invaders/assets/blasterbolt.png")
 
 
 class Ship:
