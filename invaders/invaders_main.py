@@ -125,7 +125,7 @@ class Enemy(Ship):
 
     def shoot(self):
         if self.cooldown == 0:
-            bolt = Bolt(self.pos_x + 80, self.pos_y + 300, self.bolt_image)
+            bolt = Bolt(self.pos_x + 118, self.pos_y + 300, self.bolt_image)
             self.bolts.append(bolt)
             self.cooldown = 1
 
@@ -242,7 +242,7 @@ def main():
             score += 100
             wave_length += 3
             for i in range(wave_length):
-                enemy = Enemy(random.randrange(500, WIDTH - 200), random.randrange(- 1500, - 200),
+                enemy = Enemy(random.randrange(10, WIDTH - 200), random.randrange(- 1500, - 200),
                               random.choice(["red", "blue"]))
                 enemies.append(enemy)
 
