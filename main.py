@@ -12,6 +12,8 @@ def main():
 
         if(choice == "1"):
             print("\n\nStarting TicTacToe...")
+            printLines(50)
+            print("\n")
             os.system("python " + directory + "/tictactoe/tictactoe_main.py")
             printLines(50)
             print("\n\nExiting TicTacToe...")
