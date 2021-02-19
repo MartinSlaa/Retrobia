@@ -212,7 +212,7 @@ def main():
     global xScore, oScore
 
     drawnLoading()
-    time.sleep(3)
+    time.sleep(2)
 
     drawBoard()
 
