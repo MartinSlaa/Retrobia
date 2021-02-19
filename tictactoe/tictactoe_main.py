@@ -233,7 +233,7 @@ def main():
     # Global score variables
     global xScore, oScore
     
-    # Player
+    # Player (1 = X, 2 = O)
     player = 1
 
     # Mouse button down event ID
