@@ -1,16 +1,21 @@
 import time
 import os
 
+#  Main loop
 def main():
+    # Directory of Retrobia folder
     #directory = "e:/Retrobia/"
     directory = "~/Retrobia-tictactoe"
     
+    # Meny loop
     while True:
+        # Get menu choice
         text()
         choice = input("\n\nEnter choice: ")
 
         printLines(50)
 
+        # Start game of choice or quit
         if(choice == "1"):
             print("\n\nStarting TicTacToe...")
             printLines(50)
@@ -42,7 +47,7 @@ def main():
             printLines(50)
             time.sleep(1)
             
-
+# Print menu text
 def text():
     print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
     
@@ -73,6 +78,7 @@ def text():
 
     printLines(50)
 
+# Print lines
 def printLines(num):
     for i in range(num):
         print("_", end = "")
