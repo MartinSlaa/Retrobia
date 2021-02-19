@@ -1,5 +1,6 @@
 import pygame
 import sys
+import os
 import numpy
 
 # Initialize pygame
@@ -21,8 +22,10 @@ FONT2 = pygame.font.SysFont(None, 30)
 
 # Load and resize assets
 X = pygame.image.load("tictactoe/assets/x.png")
+#X = pygame.image.load(os.path.join("assets", "x.png"))
 X = pygame.transform.smoothscale(X, (175, 175))
 O = pygame.image.load("tictactoe/assets/o.png")
+#O = pygame.image.load(os.path.join("assets", "o.png"))
 O = pygame.transform.smoothscale(O, (175, 175))
 
 # Create game screen
