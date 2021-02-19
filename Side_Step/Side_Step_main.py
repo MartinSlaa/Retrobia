@@ -1,4 +1,4 @@
-import pygame, random, sys
+import pygame, pygame.mixer, os, random, sys
 from pygame.locals import *
 
 WINDOWWIDTH = 600
@@ -39,6 +39,12 @@ def provideText(text, font, surface, x, y):
     textrect.topleft = (x, Y)
     surface.blit(textobj, textrect)
 
+def drawText(text, font, surface, x, y):
+    textobj = font.render(text, 1, TEXTCOLOR)
+    textrect = textobj.get_rect()
+    textrect.topleft = (x, y)
+    surface.blit(textobj, textrect)
+
 #Set up pygame, window and the mouse cursor
 pygame.init()
 mainClock = pygame.time.Clock()
@@ -50,18 +56,19 @@ pygame.mouse.set_visible(False)
 font = pygame.font.SysFont(None, 48)
 
 #SOUNDS
-#gameOverSound = pygame.mixer.Sound('gameover.wav')
-#pygame.mixer.music.load('background.mp3')
+#gameOverSound = pygame.mixer.load(os.path.join('assets', gameover.wav'))
+#pygame.mixer.music.load(os.path.join('assets', background.mp3'))
+#pygame.mixer.music.play(1)
 
 #IMAGES
-playerImage = pygame.image.load('player.png')
-PlayerRect = playerImage.get_rect()
-villainImage = pygame.image.load('villain.png')
+#playerImage = pygame.image.load(os.path.join('assets', 'player.png'))
+#PlayerRect = playerImage.get_rect()
+#villainImage = pygame.image.load(os.path.join('assets', 'villain.png'))
 
 #Start Screen
 windowSurface.fill(BACKGROUNDCOLOR)
 drawText('SIDE-STEP', font, windowSurface, (WINDOWWIDTH / 3),
-         (WINDOWHEIGHT / 3))
+    (WINDOWHEIGHT / 3))
 drawText ('Press any key to start!', font, windowSurface,
     (WINDOWWIDTH / 3) - 30, (WINDOWHEIGHT / 3) + 50)
 pygame.display.update()
@@ -72,16 +79,16 @@ while True:
     # Setup menu before game start
     villains = []
     score = 0
-    playerRect.topleft = (WINDOWWIDTH / 2, WINDOWHEIGHT - 50)
+    #playerRect.topleft = (WINDOWWIDTH / 2, WINDOWHEIGHT - 50)
     moveLeft = moveRight = moveUp = moveDown = False
     reverseCheat = slowCheat = False
     villainAddCounter = 0
-    pygame.mixer.music.play(-1, 0.0)
+    #pygame.mixer.music.play(-1, 0.0)
 
 while True: # game loop runs while the game part is playing
     score += 1 # Score increase
 
-    for event in pygame.event.get()
+    for event in pygame.event.get():
         if event.type == QUIT:
             terminate()
 
@@ -110,7 +117,7 @@ while True: # game loop runs while the game part is playing
                 if event.key == K_x:
                     slowCheat = False
                     score = 0
-                if event.key ==K_ESCAPE
+                if event.key ==K_ESCAPE:
                     terminate()
 
                 if event.key == K_LEFT or event.key == K_a:
@@ -121,6 +128,91 @@ while True: # game loop runs while the game part is playing
                     moveUP = False
                 if event.key == K_DOWN or event.key == K_s:
                     moveDOWN = False
+
+            if event.type == MOUSEMOTION:
+                #If the mous moves, player is placed on the cursor
+                playerRect.centerx = event.pos[0]
+                playerRect.century = event.pos[1]
+        #New villains at the top of the screen
+        if not reverseCheat and not slowCheat:
+            villainAddCounter += 1
+        if villainAddCounter == ADDNEWVILLAINRATE:
+            villainAddCounter =0
+            villainSize = random.randint(VILLAINMINSIZE, VILLAINMAXSIZE)
+            newVillain = {'rect': pygame.Rect(random.randint(0,
+                            WINDOWWIDTH - villainSize), 0 - villainSize,
+                            villainSize, villainSize),
+                          'speed': random.random.randint(VILLAINMINSPEED,
+                            VILLAINMAXSPEED),
+                          'surface':pygame.transform.scale(villainImage,
+                            (villainSize, villainSize)),
+                          }
+
+            villains.append(newVillain)
+
+        #Player movement
+        if moveLeft and playerRect.left > 0:
+            playerRect.move_ip(-1 * PLAYERMOVERATE, 0)
+        if moveRight and playerRect.right < WINDOWWIDTH:
+            playerRect.move_ip(PLAYERMOVERATE, 0)
+        if moveUp and playerRect.top > 0:
+            playerRect.move_ip(0, -1 * PLAYERMOVERATE)
+        if moveDown and playerRect.bottom < WINDOWHEIGHT:
+            playerRect.move_ip(0, PLAYERMOVERATE)
+
+        #Move the villains down
+        for v in villains:
+            if not reverseCheat and not slowCheat:
+                v['rect'].move_ip(0, v['speed'])
+            elif reverseCheat:
+                v['rect'].move_ip(0, -5)
+            elif slowCheat:
+                v['rect'].move_ip(0,1)
+
+        #Remove villains at the bottom of screen
+            for v in villains[:]:
+                if v['rect'].top > WINDOWWEIGHT:
+                    villains.remove(b)
+
+        #Game world on the window
+        windowSurface.fill(BACKGROUNDCOLOR)
+
+        #Score and top score
+        drawText('Score: %s' % (score), font, windowSurface, 10, 0)
+        drawText('Top Score: %s' % (topScore), font, windowSurface,
+            10, 40)
+
+        #Players surface
+        windowsurface.blit(playerImage, player>Rect)
+
+        #Draw willains
+        for v in villains:
+            windowsurface.blit(v['surface'], v['rect'])
+
+        pygame.display.update()
+
+        #Check if the villains have touched the player
+        if playerHasHitVillain(playerRect, villains):
+            if score > topScore:
+                topScore = score #Set new top score
+            break
+
+        mainCLock.tick(FPS)
+
+    #Game stop and show 'Game Over' screen
+    #pygame.mixer.music.stop()
+   # gameOverSound.play()
+    #gameOverSound.play()
+
+    drawText('GAME OVER', font, windowSurface, (WINDOWWIDTH / 3),
+        (WINDOWWEIGHT / 3))
+    drawText('Press any key to play again!', font, windowSurface,
+             (WINDOWWIDTH / 3) - 80, (WINDOWWEIGHT / 3) + 50)
+    pygame.display.update()
+    waitForPlayerToPressKey()
+
+    #gameOverSound.stop()
+
 
 
 
