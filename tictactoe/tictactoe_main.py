@@ -230,11 +230,14 @@ def restartGame():
 
 # Main game loop
 def main():
+    # Global score variables
+    global xScore, oScore
+    
     # Player
     player = 1
 
-    # Global score variables
-    global xScore, oScore
+    # Mouse button down event ID
+    mouseButtonDownID = ""
 
     drawnLoading()
     time.sleep(2)
@@ -251,6 +254,8 @@ def main():
 
             # Capture mouse click which determines player move
             if(event.type == pygame.MOUSEBUTTONDOWN):
+                mouseButtonDownID = event.type
+
                 mouseClickX = event.pos[0]
                 mouseClickY = event.pos[1]
 
@@ -271,7 +276,7 @@ def main():
                                 xScore = xScore + 1
                                 drawWinScreen(player)
                                 # Block mouse press event (until 'R' is pressed)
-                                pygame.event.set_blocked(MOUSEBUTTONDOWN)
+                                pygame.event.set_blocked(mouseButtonDownID)
                             # Set player to O     
                             player = 2
                         # ... or player O
@@ -284,7 +289,7 @@ def main():
                                 oScore = oScore + 1
                                 drawWinScreen(player)
                                 # Block mouse press event (until 'R' is pressed)
-                                pygame.event.set_blocked(MOUSEBUTTONDOWN)
+                                pygame.event.set_blocked(mouseButtonDownID)
                             # Set player to X
                             player = 1
         
@@ -293,14 +298,14 @@ def main():
                 # If 'R' key is clicked
                 if(event.key == pygame.K_r):
                     # Allow key press event (undo the block)
-                    pygame.event.set_allowed(MOUSEBUTTONDOWN)
+                    pygame.event.set_allowed(mouseButtonDownID)
                     # Set player to 1 and reset board
                     player = restartGame()
                 
         # Draws draw screen if board is full
         if (isBoardFull() == True):
             # Block mouse press event (until 'R' is pressed)
-            pygame.event.set_blocked(MOUSEBUTTONDOWN)
+            pygame.event.set_blocked(mouseButtonDownID)
             drawDrawScreen()
 
 main()
