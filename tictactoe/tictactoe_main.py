@@ -73,9 +73,28 @@ def drawMove():
 def drawScore(xScore, oScore):
     pygame.draw.rect(gameScreen, BOARDLINECOLOR, (0,601,600,15))
 
-    textString = str(xScore) + " - " + str(oScore)
+    xScoreStr = "00" 
+    oScoreStr = "00"
+
+    if(xScore < 10):
+        xScoreStr = "0" + str(xScore)
+    elif(xScore > 99):
+        xScoreStr = "99"
+    else:
+        xScoreStr = str(xScore)
+    
+    if(oScore < 10):
+        oScoreStr = "0" + str(oScore)
+    elif(oScore > 99):
+        oScoreStr = "99"
+    else:
+        oScoreStr = str(oScore)
+
+    print(xScoreStr, oScoreStr)
+
+    textString = xScoreStr + " - " + oScoreStr
     text = FONT1.render(textString, True, FONTCOLOR)
-    gameScreen.blit(text, (250, 680))
+    gameScreen.blit(text, (235, 680))
 
     xScoreAsset = pygame.transform.smoothscale(X, (100, 100))
     oScoreAsset = pygame.transform.smoothscale(O, (100, 100))
