@@ -2,7 +2,8 @@ import time
 import os
 
 def main():
-    directory = "e:/Retrobia/"
+    #directory = "e:/Retrobia/"
+    directory = "~/Retrobia-tictactoe"
     
     while True:
         text()
