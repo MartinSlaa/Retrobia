@@ -1,4 +1,6 @@
 import time
+from invaders import invaders_main
+from tictactoe import tictactoe_main
 
 def main():
     while True:
@@ -9,12 +11,14 @@ def main():
 
         if(choice == "1"):
             print("\n\nStarting [Game Name]...")
+            invaders_main.main()
             printLines(50)
             print("\n\nExiting [Game Name]...")
             printLines(50)
             time.sleep(1)
         elif(choice == "2"):
             print("\n\nStarting [Game Name]...")
+            tictactoe_main.main()
             printLines(50)
             print("\n\nExiting [Game Name]...")
             printLines(50)

@@ -232,7 +232,9 @@ def restartGame():
 def main():
     # Global score variables
     global xScore, oScore
-    
+
+    loopBool = True
+
     # Player (1 = X, 2 = O)
     player = 1
 
@@ -245,12 +247,13 @@ def main():
     drawBoard()
 
     # Game loop
-    while(True):
+    while(loopBool):
         # Loop for events (Key presses and mouse clicks)
         for event in pygame.event.get():
             # Exit game when window is closed
             if(event.type == pygame.QUIT):
-                sys.exit()
+                loopBool = False
+                #sys.exit()
 
             # Capture mouse click which determines player move
             if(event.type == pygame.MOUSEBUTTONDOWN):
@@ -308,4 +311,6 @@ def main():
             pygame.event.set_blocked(mouseButtonDownID)
             drawDrawScreen()
 
-main()
+    pygame.quit()
+
+#main()
