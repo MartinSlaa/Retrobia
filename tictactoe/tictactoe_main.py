@@ -29,6 +29,7 @@ O = pygame.image.load("tictactoe/assets/o.png")
 #O = pygame.image.load(os.path.join("assets", "o.png"))
 O = pygame.transform.smoothscale(O, (175, 175))
 LOGO = pygame.image.load("tictactoe/assets/logo.png")
+#LOGO = pygame.image.load(os.path.join("assets", "logo.png"))
 
 # Create game screen
 pygame.display.set_caption("Retrobia TicTacToe")
