@@ -18,7 +18,7 @@ def main():
             printLines(50)
             print("\n\nExiting TicTacToe...")
             printLines(50)
-            time.sleep(1)
+            time.sleep(2)
         elif(choice == "2"):
             print("\n\nStarting [Game Name]...")
             printLines(50)
@@ -64,7 +64,7 @@ def text():
     printLines(100)
 
     print("""\n
-    1. [Game 1]
+    1. TicTacToe
     2. [Game 2]
     3. [etc...]
     0. Exit""")
