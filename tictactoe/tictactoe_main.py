@@ -293,7 +293,7 @@ def main():
                 # If 'R' key is clicked
                 if(event.key == pygame.K_r):
                     # Allow key press event (undo the block)
-                    pygame.event.set_allowed(1025)
+                    pygame.event.set_allowed(MOUSEBUTTONDOWN)
                     # Set player to 1 and reset board
                     player = restartGame()
                 
