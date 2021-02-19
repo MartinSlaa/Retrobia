@@ -35,6 +35,7 @@ def main():
         elif(choice == "0"):
             print("\n\nExiting...")
             printLines(50)
+            print("\n")
             break
         else:
             print("\n\nInvalid...")
