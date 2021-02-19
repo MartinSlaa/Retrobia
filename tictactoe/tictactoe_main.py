@@ -51,7 +51,7 @@ def drawnLoading():
 
     textString = "Loading..."
     text = FONT1.render(textString, True, FONTCOLOR)
-    gameScreen.blit(text, (215, 600))
+    gameScreen.blit(text, (210, 600))
 
     pygame.display.update()
 
