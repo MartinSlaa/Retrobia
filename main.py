@@ -9,6 +9,7 @@ def main():
 
         if(choice == "1"):
             print("\n\nStarting [Game Name]...")
+            from tictactoe import tictactoe_main
             printLines(50)
             print("\n\nExiting [Game Name]...")
             printLines(50)
