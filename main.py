@@ -1,6 +1,9 @@
 import time
+import os
 
 def main():
+    directory = "e:/Retrobia/"
+    
     while True:
         text()
         choice = input("\n\nEnter choice: ")
@@ -8,10 +11,10 @@ def main():
         printLines(50)
 
         if(choice == "1"):
-            print("\n\nStarting [Game Name]...")
-            from tictactoe import tictactoe_main
+            print("\n\nStarting TicTacToe...")
+            os.system("python " + directory + "/tictactoe/tictactoe_main.py")
             printLines(50)
-            print("\n\nExiting [Game Name]...")
+            print("\n\nExiting TicTacToe...")
             printLines(50)
             time.sleep(1)
         elif(choice == "2"):
