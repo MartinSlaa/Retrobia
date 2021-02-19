@@ -2,7 +2,6 @@ import pygame
 import os
 import time
 import numpy
-from pygame.constants import MOUSEBUTTONDOWN
 
 # Initialize pygame
 pygame.init()
