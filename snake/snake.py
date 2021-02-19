@@ -1,6 +1,7 @@
 import random
 import sys
 import time
+import os
 import pygame
 
 
@@ -14,6 +15,9 @@ HEIGHT = 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 pygame.display.set_caption('Ssssnake')
+
+# Load watermelon
+WATERMELON = pygame.transform.scale(pygame.image.load(os.path.join("assets", "Watermelon.png")), (20, 20))
 
 # Menu Function
 def main_menu():
@@ -82,7 +86,7 @@ def main():
         WIN.fill((0, 0, 0))
 
         for square in snake_body:
-            pygame.draw.rect(WIN, (255, 255, 0), (square[0], square[1], 10, 10))
+            pygame.draw.rect(WIN, (75, 139, 59), (square[0], square[1], 20, 20))
 
         # Snake direction control
         if direction == 'right':
@@ -110,10 +114,10 @@ def main():
         if fruit_spawn:
             fruit_pos = [random.randrange(40, WIDTH - 40), random.randrange(40, HEIGHT - 40)]
             fruit_spawn = False
-        pygame.draw.rect(WIN, (138, 43, 226), (fruit_pos[0], fruit_pos[1], 10, 10))
+        WIN.blit(WATERMELON, (fruit_pos[0], fruit_pos[1], 20, 20))
 
         # Let snake eat fruit
-        if pygame.Rect(snake_pos[0], snake_pos[1], 10, 10).colliderect(pygame.Rect(fruit_pos[0], fruit_pos[1], 10, 10)):
+        if pygame.Rect(snake_pos[0], snake_pos[1], 10, 10).colliderect(pygame.Rect(fruit_pos[0], fruit_pos[1], 20, 20)):
             fruit_spawn = True
             score += 5
 
