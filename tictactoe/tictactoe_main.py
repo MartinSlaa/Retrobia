@@ -3,6 +3,7 @@ import sys
 import os
 import time
 import numpy
+from pygame.constants import MOUSEBUTTONDOWN
 
 # Initialize pygame
 pygame.init()
@@ -270,7 +271,7 @@ def main():
                                 xScore = xScore + 1
                                 drawWinScreen(player)
                                 # Block mouse press event (until 'R' is pressed)
-                                pygame.event.set_blocked(1025)
+                                pygame.event.set_blocked(MOUSEBUTTONDOWN)
                             # Set player to O     
                             player = 2
                         # ... or player O
@@ -283,7 +284,7 @@ def main():
                                 oScore = oScore + 1
                                 drawWinScreen(player)
                                 # Block mouse press event (until 'R' is pressed)
-                                pygame.event.set_blocked(1025)
+                                pygame.event.set_blocked(MOUSEBUTTONDOWN)
                             # Set player to X
                             player = 1
         
@@ -299,7 +300,7 @@ def main():
         # Draws draw screen if board is full
         if (isBoardFull() == True):
             # Block mouse press event (until 'R' is pressed)
-            pygame.event.set_blocked(1025)
+            pygame.event.set_blocked(MOUSEBUTTONDOWN)
             drawDrawScreen()
 
 main()
