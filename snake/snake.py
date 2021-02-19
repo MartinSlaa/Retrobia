@@ -19,6 +19,7 @@ pygame.display.set_caption('Ssssnake')
 # Load watermelon
 WATERMELON = pygame.transform.scale(pygame.image.load(os.path.join("assets", "Watermelon.png")), (20, 20))
 
+
 # Menu Function
 def main_menu():
     while 1:
@@ -34,6 +35,7 @@ def main_menu():
         font_pos = main_menu_message.get_rect(center=(WIDTH//2, HEIGHT//2))
         WIN.blit(main_menu_message, font_pos)
         pygame.display.update()
+
 
 # Game Over Screen
 def game_over(score):
@@ -65,7 +67,6 @@ def main():
     score = 0
     fruit_pos = [0, 0]
     fruit_spawn = True
-
 
     # Game loop
     while 1:
