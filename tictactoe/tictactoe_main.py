@@ -1,6 +1,7 @@
 import pygame
 import sys
 import os
+import time
 import numpy
 
 # Initialize pygame
@@ -27,6 +28,7 @@ X = pygame.transform.smoothscale(X, (175, 175))
 O = pygame.image.load("tictactoe/assets/o.png")
 #O = pygame.image.load(os.path.join("assets", "o.png"))
 O = pygame.transform.smoothscale(O, (175, 175))
+LOGO = pygame.image.load("tictactoe/assets/logo.png")
 
 # Create game screen
 pygame.display.set_caption("Retrobia TicTacToe")
@@ -39,9 +41,22 @@ board = numpy.zeros((3, 3))
 xScore = 0
 oScore = 0
 
+# Draw loading screen
+def drawnLoading():
+    # Background
+    gameScreen.fill(BGCOLOR)
+
+    gameScreen.blit(LOGO, (200, 200))
+
+    textString = "Loading..."
+    text = FONT1.render(textString, True, FONTCOLOR)
+    gameScreen.blit(text, (215, 600))
+
+    pygame.display.update()
+
 # Draw board
 def drawBoard():
-    #  Background
+    # Background
     gameScreen.fill(BGCOLOR)
 
     # Horizontal
@@ -89,8 +104,6 @@ def drawScore(xScore, oScore):
         oScoreStr = "99"
     else:
         oScoreStr = str(oScore)
-
-    print(xScoreStr, oScoreStr)
 
     textString = xScoreStr + " - " + oScoreStr
     text = FONT1.render(textString, True, FONTCOLOR)
@@ -197,6 +210,9 @@ def main():
     player = 1
 
     global xScore, oScore
+
+    drawnLoading()
+    time.sleep(3)
 
     drawBoard()
 
