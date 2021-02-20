@@ -10,14 +10,14 @@ pygame.init()
 font = pygame.font.SysFont('comicsansms', 30)
 
 # Window size
-WIDTH = 600
-HEIGHT = 600
+WIDTH = 500
+HEIGHT = 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 pygame.display.set_caption('Ssssnake')
 
 # Load watermelon
-WATERMELON = pygame.transform.scale(pygame.image.load(os.path.join("assets", "Watermelon.png")), (20, 20))
+WATERMELON = pygame.transform.scale(pygame.image.load(os.path.join("assets", "Watermelon.png")), (25, 25))
 
 
 # Menu Function
@@ -101,12 +101,6 @@ def main():
 
         snake_body.append(list(snake_pos))
 
-        if pygame.Rect(snake_pos[0], snake_pos[1], 10, 10).colliderect(pygame.Rect(fruit_pos[0], fruit_pos[1], 10, 10)):
-            fruit_spawn = True
-            score += 5
-        else:
-            snake_body.pop(0)
-
         for square in snake_body[:-1]:
             if pygame.Rect(square[0], square[1], 10, 10).colliderect(pygame.Rect(snake_pos[0], snake_pos[1], 10, 10)):
                 game_over(score)
@@ -118,9 +112,11 @@ def main():
         WIN.blit(WATERMELON, (fruit_pos[0], fruit_pos[1], 20, 20))
 
         # Let snake eat fruit
-        if pygame.Rect(snake_pos[0], snake_pos[1], 10, 10).colliderect(pygame.Rect(fruit_pos[0], fruit_pos[1], 20, 20)):
+        if pygame.Rect(snake_pos[0], snake_pos[1], 20, 20).colliderect(pygame.Rect(fruit_pos[0], fruit_pos[1], 25, 25)):
             fruit_spawn = True
             score += 5
+        else:
+            snake_body.pop(0)
 
         # Score display
         score_font = font.render(f'Score: {score}', True, (75, 139, 59))
@@ -128,6 +124,7 @@ def main():
         WIN.blit(score_font, font_pos)
 
         pygame.display.update()
+
         clock.tick(25)
 
         # Exit game if snake hits window edge
