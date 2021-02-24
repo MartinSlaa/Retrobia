@@ -1,8 +1,5 @@
 import time
-<<<<<<< HEAD
-=======
 import os
->>>>>>> tictactoe
 
 #  Main loop
 def main():
@@ -20,15 +17,12 @@ def main():
 
         # Start game of choice or quit
         if(choice == "1"):
-<<<<<<< HEAD
             print("\n\nStarting [Game Name]...")
-=======
             print("\n\nStarting TicTacToe...")
->>>>>>> tictactoe
             printLines(50)
             print("\n")
-            os.system("python " + directory + "/tictactoe/tictactoe_main.py")
-            #os.system("python3 " + directory + "/tictactoe/tictactoe_main.py")
+            #os.system("python " + directory + "/tictactoe/tictactoe_main.py")
+            os.system("python3 " + directory + "/tictactoe/tictactoe_main.py")
             printLines(50)
             print("\n\nExiting TicTacToe...")
             printLines(50)
