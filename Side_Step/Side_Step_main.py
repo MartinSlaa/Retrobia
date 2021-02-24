@@ -1,61 +1,59 @@
 import pygame, random
 
-#Playing screen
 WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 600
-TEXT_COLOR = pygame.Color("white")
-BACKGROUND_COLOR = pygame.Color("black")
 
 FPS = 40
 
-#Enemy objects
-ENEMY_MIN_SIZE = 4
-ENEMY_MAX_SIZE = 15
-ENEMY_MIN_SPEED = 2
-ENEMY_MAX_SPEED = 10
-ADD_NEW_ENEMY_RATE = 6
-ENEMY_COLOR = pygame.Color("darkred")
+OBJECT_SPAWN_RATE = 2
+OBJECT_MIN_SIZE = 4
+OBJECT_MAX_SIZE = 15
+OBJECT_MIN_SPEED = 2
+OBJECT_MAX_SPEED = 10
 
-#Player
-PLAYER_MOVE_RATE = 5
+PLAYER_SPEED = 5
 PLAYER_SIZE = 10
 PLAYER_MAX_UP = 150
+
+BC_COLOR = pygame.Color("black")
+TEXT_COLOR = pygame.Color("white")
+OBJECT_COLOR = pygame.Color("darkred")
 PLAYER_COLOR = pygame.Color("darkgreen")
 
 #PLAYER
 class Player:
     def __init__(self):
         self.size = PLAYER_SIZE
-        self.speed = PLAYER_MOVE_RATE
+        self.speed = PLAYER_SPEED
         self.color = PLAYER_COLOR
-        self.position = (WINDOW_WIDTH / 2, (WINDOW_HEIGHT - (WINDOW_HEIGHT / 10)))
+        self.position = (WINDOW_WIDTH / 2, (WINDOW_HEIGHT -(WINDOW_HEIGHT /10)))
 
     def draw(self, surface):
         r = self.get_rect()
         pygame.draw.rect(surface, self.color, r)
 
     def move(self, x, y):
-        newX = self.posiiton[0] + x
+        newX = self.position[0] + x
         newY = self.position[1] + y
         if newX < 0 or newX > WINDOW_WIDTH - PLAYER_SIZE:
             newX = self.position[0]
-        if newY < WINDOW_HEIGHT - PLAYER_MAX_UP or newY > WINDOW_HEIGHT - PLAYER_SIZE:
+        if newY < WINDOW_HEIGHT - PLAYER_MAX_UP or  newY > WINDOW_HEIGHT - PLAYER_SIZE:
             newY = self.position[1]
         self.position = (newX, newY)
 
     def get_rect(self):
         return pygame.Rect(self.position, (self.size, self.size))
 
-    def player_hit(self, rect):
+    def did_hit(self, rect):
         r = self.get_rect()
         return r.colliderect(rect)
 
-#Objects
-class Enemy:
+#FALLING OBJECTS
+class Object:
     def __init__(self):
-        self.size = random.randint(ENEMY_MIN_SIZE, ENEMY_MAX_SIZE)
-        self.speed = random.randint(ENEMY_MIN_SPEED, ENEMY_MAX_SPEED)
-        self.color = ENEMY_COLOR
+        self.size = random.randint(OBJECT_MIN_SIZE, OBJECT_MAX_SIZE)
+        self.speed = random.randint(OBJECT_MIN_SPEED, OBJECT_MAX_SPEED)
+        self.color = OBJECT_COLOR
         self.position = (random.randint(0, WINDOW_WIDTH-self.size), 0 - self.size)
 
     def draw(self, surface):
@@ -63,7 +61,7 @@ class Enemy:
         pygame.draw.rect(surface, self.color, r)
 
     def move(self):
-        self.position = (self.posiiton[0], self.position[1] + self.speed) #replace tuple
+        self.position = (self.position[0], self.position[1] + self.speed)
 
     def is_off_screen(self):
         return self.position[1] > WINDOW_HEIGHT
@@ -71,17 +69,17 @@ class Enemy:
     def get_rect(self):
         return pygame.Rect(self.position, (self.size, self.size))
 
-#Game setup
+#GAME STATE
 class World:
     def __init__(self):
         self.reset()
 
     def reset(self):
         self.player = Player()
-        self.enemies = []
+        self.objects = []
         self.gameOver = False
         self.score = 0
-        self.enemy_counter = 0
+        self.object_counter = 0
         self.moveUp = False
         self.moveDown = False
         self.moveLeft = False
@@ -94,30 +92,30 @@ class World:
         self.score += 1
 
         if self.moveUp:
-            self.player.move(0, -PLAYER_MOVE_RATE)
+            self.player.move(0, -PLAYER_SPEED)
         if self.moveDown:
-            self.player.move(0, PLAYER_MOVE_RATE)
+            self.player.move(0, PLAYER_SPEED)
         if self.moveLeft:
-            self.player.move(-PLAYER_MOVE_RATE, 0)
+            self.player.move(0, -PLAYER_SPEED)
         if self.moveRight:
-            self.player.move(PLAYER_MOVE_RATE, 0)
+            self.player.move(0, PLAYER_SPEED)
 
-        for e in self.enemies:
-            e.move()
-            if self.player.did_hit(e.get_rect()):
-                self.gameOver = True
-            if e.is_off_screen():
-                self.enemies.remove(e)
+        for o in self.objects:
+            o.move()
+            if self.player.did_hit(o.get_rect()):
+               self.gameOver = True
+            if o.is_off_screen():
+                self.objects.remove(o)
 
-        self.enemy_counter += 1
-        if self.enemy_counter > ADD_NEW_ENEMY_RATE:
-            self.enemy_counter = 0
-            self.enemies.append(Enemy())
+        self.object_counter += 1
+        if self.object_counter > OBJECT_SPAWN_RATE:
+            self.object_counter = 0
+            self.objects.append(Object())
 
     def draw(self, surface):
         self.player.draw(surface)
-        for e in self.enemies:
-            e.draw(surface)
+        for o in self.objects:
+            o.draw(surface)
 
     def handle_keys(self, event):
         if event.type == pygame.KEYDOWN:
@@ -145,13 +143,14 @@ def run():
 
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-    pygame.display.set_caption("SIDE-STEP")
+    pygame.display.set_caption("Side-Step")
 
     surface = pygame.Surface(screen.get_size())
     surface = surface.convert()
-    world = world()
 
-    font = pygame.font.SysFont("monospace", 42)
+    world = World()
+
+    font = pygame.font.SysFont("moonspace", 42)
 
     running = True
     while running:
@@ -160,32 +159,33 @@ def run():
                 running = False
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 running = False
-            #reset the game
             elif event.type == pygame.KEYDOWN and event.key == ord("r"):
                 world.reset()
             else:
                 world.handle_keys(event)
 
-        clock.tick(FPS)
+    clock.tick(FPS)
 
-        if not world.is_game_over():
-            world.update()
+    if not world.is_game_over():
+        world.update()
 
-        surface.fill(BACKGROUND_COLOR)
+    surface.fill(BC_COLOR)
 
-        world.draw(surface)
+    world.draw(surface)
 
-        screen.blit(surface, (0, 0))
-        text = font.render("Score {0}".format(world.score), 1, TEXT_COLOR)
-        screen.blit(text, (5, 10))
-        if world.is_game_over():
-            go = font.render("GAME OVER", 1, TEXT_COLOR)
-            screen.blit(go, (WINDOW_WIDTH / 3, WINDOW_HEIGHT /2))
-            hr = font.render("Hit R to reset", 1, TEXT_COLOR)
-            screen.blit(hr, (WINDOW_WIDTH / 3, WINDOW_HEIGHT / 2 + 45))
+    screen.blit(surface, (0, 0))
+    text = font.render("Score {0}".format(world.score), 1, TEXT_COLOR)
+    screen.blit(text, (5, 10))
+    if world.is_game_over():
+        go = font.render("GAME OVER", 1, TEXT_COLOR)
+        screen.blit(go, (WINDOW_WIDTH / 3, WINDOW_HEIGHT / 2))
+        hr = font.render("HIT THE R KEY TO RESET", 1, TEXT_COLOR)
+        screen.blit(hr, (WINDOW_WIDTH / 3, WINDOW_HEIGHT / 2 +45))
 
-        pygame.display.update()
+    pygame.display.update()
+
+
 
 if __name__ == '__main__':
-    #run()
+    run()
     pygame.quit()
