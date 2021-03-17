@@ -9,6 +9,9 @@ pygame.init()
 
 font = pygame.font.SysFont('comicsansms', 30)
 
+#Open window in the middle of the screen
+os.environ['SDL_VIDEO_CENTERED'] = '1'
+
 # Window size
 WIDTH = 500
 HEIGHT = 500
