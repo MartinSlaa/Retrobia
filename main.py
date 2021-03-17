@@ -27,17 +27,25 @@ def main():
             printLines(50)
             time.sleep(2)
         elif(choice == "2"):
-            print("\n\nStarting [Game Name]...")
+            print("\n\nStarting Invaders...")
             printLines(50)
-            print("\n\nExiting [Game Name]...")
+            print("\n")
+            #os.system("python " + directory + "/invaders/invaders_main.py")
+            os.system("python3 " + directory + "/invaders/invaders_main.py")
             printLines(50)
-            time.sleep(1)
+            print("\n\nExiting Invaders...")
+            printLines(50)
+            time.sleep(2)
         elif(choice == "3"):
-            print("\n\nStarting [Game Name]...")
+            print("\n\nStarting Snake...")
             printLines(50)
-            print("\n\nExiting [Game Name]...")
+            print("\n")
+            #os.system("python " + directory + "/snake/snake.py")
+            os.system("python3 " + directory + "/snake/snake.py")
             printLines(50)
-            time.sleep(1)
+            print("\n\nExiting Snake...")
+            printLines(50)
+            time.sleep(2)
         elif(choice == "0"):
             print("\n\nExiting...")
             printLines(50)
@@ -73,8 +81,8 @@ def text():
 
     print("""\n
     1. TicTacToe
-    2. [Game 2]
-    3. [etc...]
+    2. Invaders
+    3. Snake
     0. Exit""")
 
     printLines(50)
