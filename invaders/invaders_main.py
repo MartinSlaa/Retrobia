@@ -214,7 +214,9 @@ def main():
         # Display lost message
         if lost:
             lost_label = lost_font.render("Game Over!", 1, (255, 255, 255))
+            end_score = lost_font.render(f"Your score is {score}", 1, (255, 255, 255))
             WIN.blit(lost_label, (200, 350))
+            WIN.blit(end_score, (90, 500))
 
         # update window
         pygame.display.update()
