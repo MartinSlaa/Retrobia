@@ -5,7 +5,7 @@ import os
 def main():
     # Directory of Retrobia folder
     #directory = "e:/Retrobia/"
-    directory = "~/Retrobia-tictactoe"
+    directory = "~/Retrobia"
     
     # Meny loop
     while True:
@@ -21,7 +21,7 @@ def main():
             printLines(50)
             print("\n")
             #os.system("python " + directory + "/tictactoe/tictactoe_main.py")
-            os.system("python3 " + directory + "/tictactoe/tictactoe_main.py")
+            os.system("python3 " + directory + "/main.py")
             printLines(50)
             print("\n\nExiting TicTacToe...")
             printLines(50)
