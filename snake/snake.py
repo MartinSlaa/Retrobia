@@ -6,15 +6,16 @@ import pygame
 
 
 pygame.init()
-
+pygame.font.init()
+pygame.mixer.init()
 font = pygame.font.SysFont('comicsansms', 30)
 
 #Open window in the middle of the screen
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 # Window size
-WIDTH = 500
-HEIGHT = 500
+WIDTH = 720
+HEIGHT = 480
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 pygame.display.set_caption('Ssssnake')
@@ -23,6 +24,12 @@ pygame.display.set_caption('Ssssnake')
 WATERMELON = pygame.image.load("snake/assets/Watermelon.png")
 #WATERMELON = pygame.image.load(os.path.join("assets", "Watermelon.png"))
 WATERMELON = pygame.transform.smoothscale(WATERMELON, (25, 25))
+
+# Sounds and sound effects
+fruit_sound = pygame.mixer.Sound("snake/assets/watermelon-seed.wav")
+#fruit_sound = pygame.mixer.Sound(os.path.join('assets', 'watermelon-seed.wav'))
+game_over_sound= pygame.mixer.Sound("snake/assets/game-over.wav")
+#game_over_sound = pygame.mixer.Sound(os.path.join('assets', 'game-over.wav'))
 
 
 # Menu Function
@@ -58,6 +65,7 @@ def game_over(score):
         font_pos_score = game_over_score.get_rect(center=(WIDTH//2, HEIGHT//2+40))
         WIN.blit(game_over_message, font_pos_message)
         WIN.blit(game_over_score, font_pos_score)
+        pygame.mixer.Sound.play(game_over_sound)
         pygame.display.update()
 
         time.sleep(5)
@@ -95,7 +103,7 @@ def main():
         for square in snake_body:
             pygame.draw.rect(WIN, (75, 139, 59), (square[0], square[1], 20, 20))
 
-        # Snake direction control
+        # Direction control for the snake
         if direction == 'right':
             snake_pos[0] += 10
         elif direction == 'left':
@@ -121,6 +129,7 @@ def main():
         if pygame.Rect(snake_pos[0], snake_pos[1], 20, 20).colliderect(pygame.Rect(fruit_pos[0], fruit_pos[1], 25, 25)):
             fruit_spawn = True
             score += 5
+            pygame.mixer.Sound.play(fruit_sound)
         else:
             snake_body.pop(0)
 
@@ -133,7 +142,7 @@ def main():
 
         clock.tick(25)
 
-        # Exit game if snake hits window edge
+        # Game over if snake hits window edge
         if snake_pos[0] + 10 <= 0 or snake_pos[0] >= WIDTH:
             game_over(score)
         if snake_pos[1] + 10 <= 0 or snake_pos[1] >= HEIGHT:
