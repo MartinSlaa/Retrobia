@@ -29,11 +29,12 @@ def main_menu():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                main()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    main()
         WIN.fill((0, 0, 0))
 
-        main_menu_message = font.render('Press anywhere to start the game', True, (75, 139, 59))
+        main_menu_message = font.render('Press ENTER to start the game', True, (75, 139, 59))
         font_pos = main_menu_message.get_rect(center=(WIDTH//2, HEIGHT//2))
         WIN.blit(main_menu_message, font_pos)
         pygame.display.update()
