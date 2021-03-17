@@ -10,6 +10,9 @@ pygame.init()
 WIDTH = 600
 HEIGHT = 800
 
+# Centers screen
+os.environ['SDL_VIDEO_CENTERED'] = '1'
+
 # Colors
 FONTCOLOR = (192, 192, 192)
 WINLINECOLOR = (255, 102, 102)
