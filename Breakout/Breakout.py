@@ -1,6 +1,7 @@
 #Import the pygame library and start game
 import pygame
 
+
 #import paddle class and ball class
 from paddle import Paddle
 from ball import Ball
@@ -73,7 +74,12 @@ while carryOn:
     for event in pygame.event.get(): #user has done something
         if event.type == pygame.QUIT: #player closed game window
             carryOn = False #flag the we are done so we can exit the loop
-
+        #PAUSE GAME
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            while True:
+                event = pygame.event.wait()
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                    break #EXIT infinite loop
 
     #Moving the paddle
     keys = pygame.key.get_pressed()
