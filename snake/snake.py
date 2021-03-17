@@ -16,8 +16,10 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 pygame.display.set_caption('Ssssnake')
 
-# Load watermelon
-WATERMELON = pygame.transform.scale(pygame.image.load(os.path.join("assets", "Watermelon.png")), (25, 25))
+# Load and resize assets
+WATERMELON = pygame.image.load("snake/assets/Watermelon.png")
+#WATERMELON = pygame.image.load(os.path.join("assets", "Watermelon.png"))
+WATERMELON = pygame.transform.smoothscale(WATERMELON, (25, 25))
 
 
 # Menu Function
