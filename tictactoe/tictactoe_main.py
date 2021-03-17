@@ -21,14 +21,14 @@ FONT1 = pygame.font.SysFont(None, 60)
 FONT2 = pygame.font.SysFont(None, 30)
 
 # Load and resize assets
-#X = pygame.image.load("tictactoe/assets/x.png")
-X = pygame.image.load(os.path.join("tictactoe/assets", "x.png"))
+X = pygame.image.load("tictactoe/assets/x.png")
+#X = pygame.image.load(os.path.join("tictactoe/assets", "x.png"))
 X = pygame.transform.smoothscale(X, (175, 175))
-#O = pygame.image.load("tictactoe/assets/o.png")
-O = pygame.image.load(os.path.join("tictactoe/assets", "o.png"))
+O = pygame.image.load("tictactoe/assets/o.png")
+#O = pygame.image.load(os.path.join("tictactoe/assets", "o.png"))
 O = pygame.transform.smoothscale(O, (175, 175))
-#LOGO = pygame.image.load("tictactoe/assets/logo.png")
-LOGO = pygame.image.load(os.path.join("tictactoe/assets", "logo.png"))
+LOGO = pygame.image.load("tictactoe/assets/logo.png")
+#LOGO = pygame.image.load(os.path.join("tictactoe/assets", "logo.png"))
 
 # Game screen
 pygame.display.set_caption("Retrobia TicTacToe")
