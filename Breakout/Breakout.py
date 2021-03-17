@@ -114,21 +114,21 @@ while carryOn:
         ball.bounce()
 
         #Check if there is the ball collides with any bricks
-        brick_collision_list = pygame.sprite.spritecollide(ball,all_bricks,False)
-        for brick in brick_collision_list:
-            ball.bounce()
-            score += 1
-            brick.kill()
-            if len(all_bricks)==0:
-                #Display level complete message for 3 seconds
-                font = pygame.font.Font(None, 74)
-                text = font.render("LEVEL COMPLETE", 1, WHITE)
-                screen.blit(text, (200,300))
-                pygame.display.flip()
-                pygame.time.wait(3000)
+    brick_collision_list = pygame.sprite.spritecollide(ball,all_bricks,False)
+    for brick in brick_collision_list:
+        ball.bounce()
+        score += 1
+        brick.kill()
+        if len(all_bricks)==0:
+            #Display level complete message for 3 seconds
+            font = pygame.font.Font(None, 74)
+            text = font.render("LEVEL COMPLETE", 1, WHITE)
+            screen.blit(text, (200,300))
+            pygame.display.flip()
+            pygame.time.wait(3000)
 
-                #stop the game
-                carryOn=False
+            #stop the game
+            carryOn=False
 
 
     #clear screen to dark blue
