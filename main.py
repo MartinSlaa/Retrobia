@@ -81,8 +81,8 @@ def text():
 
     print("""\n
     1. TicTacToe
-    2. [Game 2]
-    3. [etc...]
+    2. Invaders
+    3. Snake
     0. Exit""")
 
     printLines(50)
