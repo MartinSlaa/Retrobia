@@ -5,7 +5,7 @@ import os
 def main():
     # Directory of Retrobia folder
     #directory = "e:/Retrobia/"
-    directory = "~/Retrobia"
+    directory = "~/Retrobia-master"
     
     # Meny loop
     while True:
