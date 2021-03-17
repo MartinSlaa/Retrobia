@@ -17,7 +17,6 @@ def main():
 
         # Start game of choice or quit
         if(choice == "1"):
-            print("\n\nStarting [Game Name]...")
             print("\n\nStarting TicTacToe...")
             printLines(50)
             print("\n")
