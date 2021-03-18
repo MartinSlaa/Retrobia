@@ -9,6 +9,7 @@ pygame.init()
 pygame.font.init()
 pygame.mixer.init()
 font = pygame.font.SysFont('comicsansms', 30)
+font2 = pygame.font.SysFont(None, 40)
 
 #Open window in the middle of the screen
 os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -18,12 +19,32 @@ WIDTH = 720
 HEIGHT = 480
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
-pygame.display.set_caption('Ssssnake')
+# Game screen
+pygame.display.set_caption("Retrobia Ssssnake")
+gameScreen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Draw loading screen
+def drawLoading():
+    # Fill background
+    gameScreen.fill((32, 32, 32))
+
+    # Display logo
+    gameScreen.blit(LOGO, (260, 100))
+
+    # Display text
+    textString = "Loading..."
+    text = font2.render(textString, True, (192, 192, 192))
+    gameScreen.blit(text, (300, 350))
+
+    # Update game screen
+    pygame.display.update()
 
 # Load and resize assets
 WATERMELON = pygame.image.load("snake/assets/Watermelon.png")
 #WATERMELON = pygame.image.load(os.path.join("assets", "Watermelon.png"))
 WATERMELON = pygame.transform.smoothscale(WATERMELON, (25, 25))
+LOGO = pygame.image.load("snake/assets/logo.png")
+#LOGO = pygame.image.load(os.path.join("snake/assets", "logo.png"))
 
 # Sounds and sound effects
 fruit_sound = pygame.mixer.Sound("snake/assets/watermelon-seed.wav")
@@ -81,7 +102,7 @@ def main():
     score = 0
     fruit_pos = [0, 0]
     fruit_spawn = True
-
+    
     # Game loop
     while 1:
         for event in pygame.event.get():
@@ -149,4 +170,6 @@ def main():
             game_over(score)
 
 
+drawLoading()
+time.sleep(2)
 main_menu()
