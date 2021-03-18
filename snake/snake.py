@@ -8,10 +8,12 @@ import pygame
 pygame.init()
 pygame.font.init()
 pygame.mixer.init()
+
+# Fonts
 font = pygame.font.SysFont('comicsansms', 30)
 font2 = pygame.font.SysFont(None, 40)
 
-#Open window in the middle of the screen
+# Open window in the middle of the screen
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 # Window size

@@ -1,6 +1,7 @@
 # importing necessary packages
 import pygame
 import os
+import time
 import random
 
 
@@ -9,9 +10,32 @@ pygame.font.init()
 # Make sure the game starts at the center of screen
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
+# Fonts
+FONT1 = pygame.font.SysFont(None, 40)
+
 # define window size
 WIDTH, HEIGHT = 750, 1050
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Game screen
+pygame.display.set_caption("Retrobia Invaders")
+gameScreen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Draw loading screen
+def drawLoading():
+    # Fill background
+    gameScreen.fill((32, 32, 32))
+
+    # Display logo
+    gameScreen.blit(LOGO, (260, 300))
+
+    # Display text
+    textString = "Loading..."
+    text = FONT1.render(textString, True, (192, 192, 192))
+    gameScreen.blit(text, (300, 550))
+
+    # Update game screen
+    pygame.display.update()
 
 # Load images of enemy ships
 BOSS_SHIP = pygame.image.load("invaders/assets/boss_ship.png")
@@ -32,6 +56,10 @@ BACKGROUND = pygame.transform.scale(pygame.image.load("invaders/assets/blueNebul
 # Load lasers image
 BOLT_LASER_BLUE = pygame.image.load("invaders/assets/blasterbolt.png")
 #BOLT_LASER_BLUE = pygame.image.load(os.path.join("assets", "blasterbolt.png"))
+
+# Load Retrobia Logo
+LOGO = pygame.image.load("invaders/assets/logo.png")
+#LOGO = pygame.image.load(os.path.join("invaders/assets", "logo.png"))
 
 
 class Ship:
@@ -319,4 +347,6 @@ def menu():
 
 
 # run program
+drawLoading()
+time.sleep(2)
 menu()
