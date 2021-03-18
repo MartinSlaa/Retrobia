@@ -19,7 +19,6 @@ os.environ['SDL_VIDEO_CENTERED'] = '1'
 # Window size
 WIDTH = 720
 HEIGHT = 480
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Game screen
 pygame.display.set_caption("Retrobia Ssssnake")
@@ -47,6 +46,9 @@ WATERMELON = pygame.image.load("snake/assets/Watermelon.png")
 WATERMELON = pygame.transform.smoothscale(WATERMELON, (25, 25))
 LOGO = pygame.image.load("snake/assets/logo.png")
 #LOGO = pygame.image.load(os.path.join("snake/assets", "logo.png"))
+RATTLESNAKE = pygame.image.load("snake/assets/Rattlesnake.png")
+#RATTLESNAKE = pygame.image.load(os.path.join("assets", "Rattlesnake.png"))
+RATTLESNAKE = pygame.transform.smoothscale(RATTLESNAKE, (205, 300))
 
 # Sounds and sound effects
 fruit_sound = pygame.mixer.Sound("snake/assets/watermelon-seed.wav")
@@ -65,11 +67,11 @@ def main_menu():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     main()
-        WIN.fill((0, 0, 0))
-
-        main_menu_message = font.render('Press ENTER to start the game', True, (75, 139, 59))
-        font_pos = main_menu_message.get_rect(center=(WIDTH//2, HEIGHT//2))
-        WIN.blit(main_menu_message, font_pos)
+        gameScreen.fill((0, 0, 0))
+        main_menu_message = font.render('Press ENTER to start a new game', True, (75, 139, 59))
+        font_pos = main_menu_message.get_rect(center=(WIDTH//2, HEIGHT//10))
+        gameScreen.blit(main_menu_message, font_pos)
+        gameScreen.blit(RATTLESNAKE, (260, 100))
         pygame.display.update()
 
 
@@ -80,14 +82,14 @@ def game_over(score):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        WIN.fill((0, 0, 0))
+        gameScreen.fill((0, 0, 0))
 
         game_over_message = font.render('You Lost', True, (255, 0, 0))
         game_over_score = font.render(f'Your score was {score}', True, (255, 255, 255))
         font_pos_message = game_over_message.get_rect(center=(WIDTH//2, HEIGHT//2))
         font_pos_score = game_over_score.get_rect(center=(WIDTH//2, HEIGHT//2+40))
-        WIN.blit(game_over_message, font_pos_message)
-        WIN.blit(game_over_score, font_pos_score)
+        gameScreen.blit(game_over_message, font_pos_message)
+        gameScreen.blit(game_over_score, font_pos_score)
         pygame.mixer.Sound.play(game_over_sound)
         pygame.display.update()
 
@@ -121,10 +123,10 @@ def main():
                 direction = 'left'
             if (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and direction != 'left':
                 direction = 'right'
-        WIN.fill((0, 0, 0))
+        gameScreen.fill((0, 0, 0))
 
         for square in snake_body:
-            pygame.draw.rect(WIN, (75, 139, 59), (square[0], square[1], 20, 20))
+            pygame.draw.rect(gameScreen, (75, 139, 59), (square[0], square[1], 20, 20))
 
         # Direction control for the snake
         if direction == 'right':
@@ -146,7 +148,7 @@ def main():
         if fruit_spawn:
             fruit_pos = [random.randrange(40, WIDTH - 40), random.randrange(40, HEIGHT - 40)]
             fruit_spawn = False
-        WIN.blit(WATERMELON, (fruit_pos[0], fruit_pos[1], 20, 20))
+        gameScreen.blit(WATERMELON, (fruit_pos[0], fruit_pos[1], 20, 20))
 
         # Let snake eat fruit
         if pygame.Rect(snake_pos[0], snake_pos[1], 20, 20).colliderect(pygame.Rect(fruit_pos[0], fruit_pos[1], 25, 25)):
@@ -159,7 +161,7 @@ def main():
         # Score display
         score_font = font.render(f'Score: {score}', True, (75, 139, 59))
         font_pos = score_font.get_rect(center=(WIDTH//2-40, 30))
-        WIN.blit(score_font, font_pos)
+        gameScreen.blit(score_font, font_pos)
 
         pygame.display.update()
 

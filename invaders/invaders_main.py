@@ -15,24 +15,23 @@ FONT1 = pygame.font.SysFont(None, 40)
 
 # define window size
 WIDTH, HEIGHT = 750, 1050
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Game screen
 pygame.display.set_caption("Retrobia Invaders")
-gameScreen = pygame.display.set_mode((WIDTH, HEIGHT))
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Draw loading screen
 def drawLoading():
     # Fill background
-    gameScreen.fill((32, 32, 32))
+    WIN.fill((32, 32, 32))
 
     # Display logo
-    gameScreen.blit(LOGO, (260, 300))
+    WIN.blit(LOGO, (260, 300))
 
     # Display text
     textString = "Loading..."
     text = FONT1.render(textString, True, (192, 192, 192))
-    gameScreen.blit(text, (300, 550))
+    WIN.blit(text, (300, 550))
 
     # Update game screen
     pygame.display.update()
