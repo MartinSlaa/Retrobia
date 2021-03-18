@@ -128,7 +128,7 @@ def main():
         # Let snake eat fruit
         if pygame.Rect(snake_pos[0], snake_pos[1], 20, 20).colliderect(pygame.Rect(fruit_pos[0], fruit_pos[1], 25, 25)):
             fruit_spawn = True
-            score += 5
+            score += 10
             pygame.mixer.Sound.play(fruit_sound)
         else:
             snake_body.pop(0)
