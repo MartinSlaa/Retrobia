@@ -45,7 +45,7 @@ xScore = 0
 oScore = 0
 
 # Draw loading screen
-def drawnLoading():
+def drawLoading():
     # Fill background
     gameScreen.fill(BGCOLOR)
 
@@ -156,7 +156,7 @@ def drawWinScreen(player):
     # Update game screen
     pygame.display.update()
 
-# Draw drawn screen
+# Draw draw screen
 def drawDrawScreen():
     # Fill background
     gameScreen.fill(BGCOLOR)
@@ -243,7 +243,7 @@ def main():
     # Mouse button down event ID
     mouseButtonDownID = ""
 
-    drawnLoading()
+    drawLoading()
     time.sleep(2)
 
     drawBoard()
