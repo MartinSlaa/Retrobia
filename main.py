@@ -11,7 +11,7 @@ def main():
     while True:
         # Get menu choice
         text()
-        choice = input("\n\nEnter choice: ")
+        choice = input("\n\nEnter number to start game: ")
 
         printLines(50)
 
@@ -69,13 +69,6 @@ def text():
                 ██╔══██╗██╔══╝     ██║   ██╔══██╗██║   ██║██╔══██╗██║██╔══██║
                 ██║  ██║███████╗   ██║   ██║  ██║╚██████╔╝██████╔╝██║██║  ██║
                 ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═╝╚═╝  ╚═╝""")
-    
-    printLines(100)
-    
-    print("""\n
-[About us]
-[How to start]
-[etc...]""")
 
     printLines(100)
 
