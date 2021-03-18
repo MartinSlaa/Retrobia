@@ -1,7 +1,7 @@
 # Retrobia
 
 ## General Instructions
-By running "python3 main.py", Retrobia's logo and the game console's main menu will appear. In this menu, the user will have the option to pick games based on the numbers in the text menu. To quit the game console, enter *0*.
+By running "python3 main.py", Retrobia's logo and the game console's main menu will appear. In this menu, the user will have the option to pick games based on the numbers in the text menu. Each game can be started by entering the number correspondig to the game and then pressing *ENTER*. To quit the game console, enter *0*.
 
 ## TicTacToe Instructions
 Tic tac toe, also known as noughts and crosses, is a classic game, usually played with pen and paper, however, this time presented in digital form.
