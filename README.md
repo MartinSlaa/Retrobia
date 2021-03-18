@@ -23,4 +23,7 @@ Enemy lasers disappear when you destroy the enemy ship that fired that laser.
 Playing aggressively can help you survive longer!
 
 ## Snake Instructions
-[Text]
+In this version of the iconic Snake game you control a snake on a mission to eat watermelons. Each time a watermelon is eaten a new one appears somewhere on the screen. As the snake eats more watermelons it grows in length. 
+Upon starting the game, you push ENTER to start a new run.
+The snake is controlled with either the *W*, *A*, *S* and *D* keys or the arrow keys.
+Each watermelon eaten rewards you with 10 points. If the snake hits the edges of the screen or its own tail, the game is over.
