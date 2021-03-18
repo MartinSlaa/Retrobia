@@ -71,6 +71,7 @@ def main_menu():
                 if event.key == pygame.K_RETURN:
                     main()
         gameScreen.fill((0, 0, 0))
+        # Message and artwork on the main menu
         main_menu_message = font.render('Press ENTER to start a new game', True, (75, 139, 59))
         font_pos = main_menu_message.get_rect(center=(WIDTH//2, HEIGHT//10))
         gameScreen.blit(main_menu_message, font_pos)
@@ -158,7 +159,9 @@ def main():
         # Let snake eat fruit
         if pygame.Rect(snake_pos[0], snake_pos[1], 20, 20).colliderect(pygame.Rect(fruit_pos[0], fruit_pos[1], 25, 25)):
             fruit_spawn = True
+            # Number added to score
             score += 10
+            # Sound effect when fruit is eaten
             pygame.mixer.Sound.play(fruit_sound)
         else:
             snake_body.pop(0)
@@ -169,7 +172,8 @@ def main():
         gameScreen.blit(score_font, font_pos)
 
         pygame.display.update()
-
+        
+        # Frames per second, increasing/decreasing this number changes the movement speed of the snake
         clock.tick(25)
 
         # Game over if snake hits window edge
