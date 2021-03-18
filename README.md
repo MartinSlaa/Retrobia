@@ -7,8 +7,8 @@
 ## TicTacToe Instructions
 [Text]
 
-## Invaders
+## Invaders Instructions
 [Text]
 
-## Snake
+## Snake Instructions
 [Text]
