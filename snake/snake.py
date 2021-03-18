@@ -49,6 +49,9 @@ LOGO = pygame.image.load("snake/assets/logo.png")
 RATTLESNAKE = pygame.image.load("snake/assets/Rattlesnake.png")
 #RATTLESNAKE = pygame.image.load(os.path.join("assets", "Rattlesnake.png"))
 RATTLESNAKE = pygame.transform.smoothscale(RATTLESNAKE, (205, 300))
+WATERMELON_SLICE = pygame.image.load("snake/assets/watermelon-slice.png")
+#WATERMELON_SLICE = pygame.image.load(os.path.join("assets", "watermelon-slice.png"))
+WATERMELON_SLICE = pygame.transform.smoothscale(WATERMELON_SLICE, (100, 100))
 
 # Sounds and sound effects
 fruit_sound = pygame.mixer.Sound("snake/assets/watermelon-seed.wav")
@@ -72,6 +75,8 @@ def main_menu():
         font_pos = main_menu_message.get_rect(center=(WIDTH//2, HEIGHT//10))
         gameScreen.blit(main_menu_message, font_pos)
         gameScreen.blit(RATTLESNAKE, (260, 100))
+        gameScreen.blit(WATERMELON_SLICE, (480, 300))
+        gameScreen.blit(WATERMELON_SLICE, (140, 300))
         pygame.display.update()
 
 
