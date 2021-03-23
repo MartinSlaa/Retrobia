@@ -91,20 +91,48 @@ def main_menu():
 
 
 # Game Over Screen
-def game_over(score):
+def game_over(score, highscore):
     while 1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
         gameScreen.fill((0, 0, 0))
+        # You Lost message
         game_over_message = font.render('You Lost', True, (255, 0, 0))
-        game_over_score = font.render(f'Your score was {score}', True, (255, 255, 255))
         font_pos_message = game_over_message.get_rect(center=(WIDTH//2, HEIGHT//2))
+        # Your score message
+        game_over_score = font.render(f'Your score was {score}', True, (255, 255, 255))
         font_pos_score = game_over_score.get_rect(center=(WIDTH//2, HEIGHT//2+40))
+        # Message displaying current highscore
+        high_score = font.render(f"Current Highscore is: {highscore}", 1, (255, 165, 0))
+        font_pos_highscore = high_score.get_rect(center=(WIDTH//2, HEIGHT//2+80))
+        # Message displayed when highscore is beaten
+        beat_high_score = font.render(f"New Highscore!", 1, (255, 215, 0))
+        font_pos_new_highscore = beat_high_score.get_rect(center=(WIDTH//2, HEIGHT//2+80))
+        # Message displayed when highscore is tied
+        tie_score = font.render(f"You tied with the Highscore!", 1, (255, 255, 255))
+        font_pos_tie_score = tie_score.get_rect(center=(WIDTH//2, HEIGHT//2+80))
         gameScreen.blit(game_over_message, font_pos_message)
         gameScreen.blit(game_over_score, font_pos_score)
+        # Sound played on game over screen
         pygame.mixer.Sound.play(game_over_sound)
+        # When current score is higher than the high score
+        if score > highscore:
+            gameScreen.blit(beat_high_score, font_pos_new_highscore)
+            with open("snake/score.txt", "w") as f:
+                f.write(f"Current highscore is: {score}\n")
+                f.close()
+        # When current score is the same as the high score
+        if score == highscore:
+            gameScreen.blit(tie_score, font_pos_tie_score)
+            with open("snake/score.txt", "w") as f:
+                f.write(f"Your shared highscore is: {score}\n")
+                f.close()
+        # When current score is lower than the high score
+        if score < highscore:
+            gameScreen.blit(high_score, font_pos_highscore)
+            pass
         pygame.display.update()
 
         time.sleep(5)
@@ -120,6 +148,15 @@ def main():
     score = 0
     fruit_pos = [0, 0]
     fruit_spawn = True
+
+    highscore = 0
+    file = open("snake/score.txt", "r")
+    content = file.read()
+
+    x = content.split()
+    for i in x:
+        if i.isdigit():
+            highscore = int(i)
     
     # Game loop
     while 1:
@@ -186,9 +223,9 @@ def main():
 
         # Game over if snake hits window edge
         if snake_pos[0] + 10 <= 0 or snake_pos[0] >= WIDTH:
-            game_over(score)
+            game_over(score, highscore)
         if snake_pos[1] + 10 <= 0 or snake_pos[1] >= HEIGHT:
-            game_over(score)
+            game_over(score, highscore)
 
 
 drawLoading()
