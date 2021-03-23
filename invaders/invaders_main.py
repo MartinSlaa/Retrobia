@@ -58,7 +58,7 @@ BOLT_LASER_BLUE = pygame.image.load("invaders/assets/blasterbolt.png")
 
 # Load Retrobia Logo
 LOGO = pygame.image.load("invaders/assets/logo.png")
-#LOGO = pygame.image.load(os.path.join("invaders/assets", "logo.png"))
+#LOGO = pygame.image.load(os.path.join("assets", "logo.png"))
 
 
 class Ship:
@@ -208,6 +208,7 @@ def main():
     # declaring the fonts used in the game
     main_font = pygame.font.SysFont("lucidasans", 40)
     lost_font = pygame.font.SysFont("impact", 80)
+    high_score_font = pygame.font.SysFont("comicsans", 60)
 
     # bolt variables
     bolt_velocity = 10
@@ -225,12 +226,23 @@ def main():
     lost = False
     lost_count = 0
 
+    highscore = 0
+    file = open("score.txt", "r")
+    content = file.read()
+
+    x = content.split()
+    for i in x:
+        if i.isdigit():
+            highscore = int(i)
+
+
     # Redraw function to draw UI and lost text
     def redraw_window():
         WIN.blit(BACKGROUND, (0, 0))
         level_label = main_font.render(f"Level: {level}", 1, (255, 255, 255))
         score_label = main_font.render(f"Score: {score}", 1, (255, 255, 255))
         lives_label = main_font.render(f"Lives: {lives}", 1, (255, 255, 255))
+
 
         # Placement of lives, level and score on the screen
         WIN.blit(level_label, (5, 1))
@@ -248,9 +260,26 @@ def main():
         if lost:
             lost_label = lost_font.render("Game Over!", 1, (255, 255, 255))
             end_score = lost_font.render(f"Your score is {score}", 1, (255, 255, 255))
+            high_score_label = high_score_font.render(f"Current Highscore is: {highscore}", 1, (255, 255, 255))
+            beat_high_score_label = high_score_font.render(f"New Highscore!", 1, (255, 255, 255))
+            tie_score_label = high_score_font.render(f"You tied with the Highscore!", 1, (255, 255, 255))
+
             WIN.blit(lost_label, (200, 350))
             WIN.blit(end_score, (90, 500))
 
+            if score > highscore:
+                WIN.blit(beat_high_score_label, (200, 600))
+                with open("score.txt", "w") as f:
+                    f.write(f"Current highscore is: {score}\n")
+                    f.close()
+            if score == highscore:
+                WIN.blit(tie_score_label, (100, 600))
+                with open("score.txt", "w") as f:
+                    f.write(f"Your shared highscore is: {score}\n")
+                    f.close()
+            if score < highscore:
+                WIN.blit(high_score_label, (100, 600))
+                pass
         # update window
         pygame.display.update()
 
@@ -266,7 +295,7 @@ def main():
 
         # used to define how long lost screen is showed
         if lost:
-            if lost_count > fps * 3:
+            if lost_count > fps * 8:
                 run = False
             else:
                 continue
@@ -274,12 +303,12 @@ def main():
         # create random waves of enemies and move to next level if player kills all enemies
         if len(enemies) == 0:
             level += 1
-            score += 100
             wave_length += 3
             for i in range(wave_length):
                 enemy = Enemy(random.randrange(10, WIDTH - 200), random.randrange(- 1500, - 200),
                               random.choice(["red", "blue"]))
                 enemies.append(enemy)
+            score += 100
 
         # if player exit game, terminate program by setting run to false
         for event in pygame.event.get():
@@ -324,16 +353,12 @@ def main():
 
 def menu():
     title_font = pygame.font.SysFont("comicsans", 90)
-    high_score_font = pygame.font.SysFont("comicsans", 60)
     run = True
     while run:
         # show menu
         WIN.blit(BACKGROUND, (0, 0))
         title_label = title_font.render("Press space to begin!", 1, (255, 255, 255))
         WIN.blit(title_label, (60, 200))
-
-        high_score_label = high_score_font.render("Press mouse to show high scores", 1, (255, 255, 255))
-        WIN.blit(high_score_label, (50, 350))
 
         pygame.display.update()
         for event in pygame.event.get():

@@ -58,24 +58,33 @@ fruit_sound = pygame.mixer.Sound("snake/assets/watermelon-seed.wav")
 #fruit_sound = pygame.mixer.Sound(os.path.join('assets', 'watermelon-seed.wav'))
 game_over_sound= pygame.mixer.Sound("snake/assets/game-over.wav")
 #game_over_sound = pygame.mixer.Sound(os.path.join('assets', 'game-over.wav'))
+click_sound= pygame.mixer.Sound("snake/assets/retro-click.wav")
+#click_sound = pygame.mixer.Sound(os.path.join('assets', 'retro-click.wav'))
 
 
 # Menu Function
 def main_menu():
     while 1:
         for event in pygame.event.get():
+            # If user presses ESC
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            # If user presses ENTER
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
+                    # Sound effect to confirm ENTER
+                    pygame.mixer.Sound.play(click_sound)
+                    # Call main() function to start game
                     main()
         gameScreen.fill((0, 0, 0))
         # Message and artwork on the main menu
         main_menu_message = font.render('Press ENTER to start a new game', True, (75, 139, 59))
         font_pos = main_menu_message.get_rect(center=(WIDTH//2, HEIGHT//10))
         gameScreen.blit(main_menu_message, font_pos)
+        # Snake artwork
         gameScreen.blit(RATTLESNAKE, (260, 100))
+        # Watermelon artwork
         gameScreen.blit(WATERMELON_SLICE, (480, 300))
         gameScreen.blit(WATERMELON_SLICE, (140, 300))
         pygame.display.update()
@@ -89,7 +98,6 @@ def game_over(score):
                 pygame.quit()
                 sys.exit()
         gameScreen.fill((0, 0, 0))
-
         game_over_message = font.render('You Lost', True, (255, 0, 0))
         game_over_score = font.render(f'Your score was {score}', True, (255, 255, 255))
         font_pos_message = game_over_message.get_rect(center=(WIDTH//2, HEIGHT//2))
