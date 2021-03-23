@@ -227,7 +227,7 @@ def main():
     lost_count = 0
 
     highscore = 0
-    file = open("score.txt", "r")
+    file = open("invaders\score.txt", "r")
     content = file.read()
 
     x = content.split()
@@ -269,12 +269,12 @@ def main():
 
             if score > highscore:
                 WIN.blit(beat_high_score_label, (200, 600))
-                with open("score.txt", "w") as f:
+                with open("invaders\score.txt", "w") as f:
                     f.write(f"Current highscore is: {score}\n")
                     f.close()
             if score == highscore:
                 WIN.blit(tie_score_label, (100, 600))
-                with open("score.txt", "w") as f:
+                with open("invaders\score.txt", "w") as f:
                     f.write(f"Your shared highscore is: {score}\n")
                     f.close()
             if score < highscore:
