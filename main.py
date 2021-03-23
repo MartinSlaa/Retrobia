@@ -46,6 +46,16 @@ def main():
             print("\n\nExiting Snake...")
             printLines(50)
             time.sleep(2)
+        elif(choice == "4"):
+            print("\n\nStarting Bricks...")
+            printLines(50)
+            print("\n")
+            #os.system("python " + directory + "/snake/snake.py")
+            #os.system("python3 " + directory + "/snake/snake.py")
+            printLines(50)
+            print("\n\nExiting Bricks...")
+            printLines(50)
+            time.sleep(2)
         elif(choice == "0"):
             print("\n\nExiting...")
             printLines(50)
@@ -76,6 +86,7 @@ def text():
     1. TicTacToe
     2. Invaders
     3. Snake
+    4. Bricks
     0. Exit""")
 
     printLines(50)
