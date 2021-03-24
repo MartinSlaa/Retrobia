@@ -187,6 +187,7 @@ class Bolt:
         return collide(box, self)
 
 
+# Function to detect if objects collide
 def collide(obj1, obj2):
     offset_x = obj2.pos_x - obj1.pos_x
     offset_y = obj2.pos_y - obj1.pos_y
@@ -226,15 +227,16 @@ def main():
     lost = False
     lost_count = 0
 
+    # Setting highscore
     highscore = 0
     file = open("invaders\score.txt", "r")
     content = file.read()
 
+    # Getting highscore from text file and convert the string to integer
     x = content.split()
     for i in x:
         if i.isdigit():
             highscore = int(i)
-
 
     # Redraw function to draw UI and lost text
     def redraw_window():
@@ -242,7 +244,6 @@ def main():
         level_label = main_font.render(f"Level: {level}", 1, (255, 255, 255))
         score_label = main_font.render(f"Score: {score}", 1, (255, 255, 255))
         lives_label = main_font.render(f"Lives: {lives}", 1, (255, 255, 255))
-
 
         # Placement of lives, level and score on the screen
         WIN.blit(level_label, (5, 1))
@@ -263,10 +264,10 @@ def main():
             high_score_label = high_score_font.render(f"Current Highscore is: {highscore}", 1, (255, 255, 255))
             beat_high_score_label = high_score_font.render(f"New Highscore!", 1, (255, 255, 255))
             tie_score_label = high_score_font.render(f"You tied with the Highscore!", 1, (255, 255, 255))
-
             WIN.blit(lost_label, (200, 350))
             WIN.blit(end_score, (90, 500))
 
+            # Highscore logic, check if new highscore, equal highscore or not highscore
             if score > highscore:
                 WIN.blit(beat_high_score_label, (200, 600))
                 with open("invaders\score.txt", "w") as f:
@@ -350,7 +351,7 @@ def main():
         # check if player bolts hits an enemy and removes bolt and enemy
         player.move_bolts(-bolt_velocity, enemies)
 
-
+# Setting up a start menu for the game.
 def menu():
     title_font = pygame.font.SysFont("comicsans", 90)
     run = True
