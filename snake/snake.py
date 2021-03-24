@@ -193,7 +193,7 @@ def main():
 
         for square in snake_body[:-1]:
             if pygame.Rect(square[0], square[1], 10, 10).colliderect(pygame.Rect(snake_pos[0], snake_pos[1], 10, 10)):
-                game_over(score)
+                game_over(score, highscore)
 
         # Add random fruit spawn
         if fruit_spawn:
