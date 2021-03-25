@@ -59,8 +59,8 @@ def drawLoading(screen):
     screen.blit(LOGO, (300, 100))
 
     font1 = pygame.font.Font(None, 74)
-    text = font.render("Loading...", 1, WHITE)
-    screen.blit(text, (350, 450))
+    text = font1.render("Loading...", 1, WHITE)
+    screen.blit(text, (300, 450))
 
     # Update screen
     pygame.display.update()
