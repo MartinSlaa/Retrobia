@@ -44,10 +44,10 @@ class Ball(pygame.sprite.Sprite):
 
     def bounce(self):
         self.velocity[0] = -self.velocity[0]
-        self.velocity[1] = randint(-8,8)
+        self.velocity[1] = randint(-4,4)
         if self._status:
             self.velocity[0] = -self.velocity[0]
-            self.velocity[1] = randint(-8,8)
+            self.velocity[1] = randint(-4,4)
 
     def moveToPaddle(self, paddle):
         self.rect.x = paddle.position[0] + paddle.width//2

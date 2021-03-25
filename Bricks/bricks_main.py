@@ -5,6 +5,7 @@ import os
 import time
 import sys
 
+
 # import paddle class and ball class
 from paddle import Paddle
 from ball import Ball
@@ -12,6 +13,7 @@ from brick import Brick
 
 # INITIALIZE PYGAME
 pygame.init()
+pygame.font.init()
 
 # Center the Game Application
 os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -28,7 +30,7 @@ BRICK = (80, 25, 33)
 
 score = 0
 lives = 3
-
+#highscore = (highscore)
 # open a new window
 screen_width = 800
 screen_height = 600
@@ -40,8 +42,13 @@ pygame.display.set_caption("Bricks")
 
 # This will be a list that will contain all the sprites we intend to use in game
 all_sprites_list = pygame.sprite.Group()
-font = pygame.font.Font(None, 34)
 
+font = pygame.font.Font(None, 34)
+font1 = pygame.font.Font(None, 40)
+font3 = pygame.font.Font(None, 200)
+font4 = pygame.font.Font(None, 100)
+def highscore():
+    highscore > score
 # Draw loading screen
 def drawLoading(screen):
     # Fill background
@@ -52,8 +59,8 @@ def drawLoading(screen):
     screen.blit(LOGO, (300, 100))
 
     font1 = pygame.font.Font(None, 74)
-    text = font1.render("Loading...", 1, WHITE)
-    screen.blit(text, (300, 450))
+    text = font.render("Loading...", 1, WHITE)
+    screen.blit(text, (350, 450))
 
     # Update screen
     pygame.display.update()
@@ -78,9 +85,10 @@ def text_format(message, textFont, size, textColor):
 
 ##GAME FONTS
 # font = 'Retro.ttf'
+
 def main_menu_menu(screen, font, selected):
     screen.fill(DARKBLUE)
-    title = text_format('BRICKS!', font, 90, YELLOW)
+    title = font3.render("BRICKS!", 1, YELLOW)
     if selected == 'start':
         text_start = text_format('START', font, 75, WHITE)
     else:
@@ -98,7 +106,7 @@ def main_menu_menu(screen, font, selected):
 
 def display_howto(screen, font):
     screen.fill(LIGHTBLUE)
-    title = text_format('HOW TO PLAY BRICKS', font, 90, YELLOW)
+    title = text_format('HOW TO PLAY BRICKS', font4, 1, YELLOW)
     howto = text_format('Move using left and right arrow, start game with SPACEBAR', font, 75, BLACK)
     back = text_format('GO BACK', font, 75, BLACK)
     title_rect = title.get_rect()
@@ -120,8 +128,8 @@ def display_howto(screen, font):
                     return
 
         screen.blit(title, (screen_width / 2 - (title_rect[2] / 2), 80))
-        screen.blit(howto, (screen_width / 2 - (howto_rect[2] / 2), 340))
-        screen.blit(back, (screen_width / 2 - (back_rect[2] / 2), 500))
+        screen.blit(howto, (screen_width / 2 - (howto_rect[2] / 2), 240))
+        screen.blit(back, (screen_width / 2 - (back_rect[2] / 2), 400))
         pygame.display.update()
         clock.tick(FPS)
 
@@ -146,7 +154,7 @@ def main_menu():
                 selected = selection[idx]
                 if event.key == pygame.K_RETURN:
                     if selected == 'start':
-                        print('start')
+                        #print('start')
                         menu = False
                     elif selected == 'quit':
                         pygame.quit()
@@ -165,8 +173,6 @@ def main_menu():
         screen.blit(text_quit, (screen_width / 2 - (quit_rect[2] / 2), 400))
         pygame.display.update()
         clock.tick(FPS)
-
-
 
 # List of sprites to be used in game
 all_sprites_list = pygame.sprite.Group()
@@ -230,7 +236,7 @@ while carryOn:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
         paddle.moveLeft(5)
-        if not ball.moving:
+    if not ball.moving:
             ball.moveToPaddle(paddle)
     if keys[pygame.K_RIGHT]:
         paddle.moveRight(5)
@@ -252,7 +258,7 @@ while carryOn:
         ball.moveToPaddle(paddle)
         lives -= 1
         if lives == 0:
-            # Display Game Over Message for 3 seconds
+# Display Game Over Message for 3 seconds
             font1 = pygame.font.Font(None, 50)
             text = font1.render("GAME OVER! PLAY AGAIN?", 1, WHITE)
             screen.blit(text, (175, 300))
@@ -272,16 +278,16 @@ while carryOn:
     brick_collision_list = pygame.sprite.spritecollide(ball, all_bricks, False)
     for brick in brick_collision_list:
         ball.bounce()
-        score += 1
+        score += 10
         brick.kill()
         if len(all_bricks) == 0:
             # Display level complete message for 3 seconds
             font1 = pygame.font.Font(None, 50)
-            text = font1.render('LEVEL COMPLETE', 1, YELLOW)
-            screen.blit(text, (275, 300))
+            text = font1.render('LEVEL COMPLETE', 1, WHITE)
+            screen.blit(text, (260, 300))
             pygame.display.flip()
             pygame.time.wait(3000)
-            title = text_format('LEVEL COMPLETE', font, 90, YELLOW)
+
 
             # stop the game
             carryOn = True
@@ -295,13 +301,17 @@ while carryOn:
     screen.blit(text, (20, 10))
     text = font.render("Lives: " + str(lives), 1, WHITE)
     screen.blit(text, (650, 10))
+    #text = font.render("High Score: " + str(highscore), 1, WHITE)
+    #screen.blitt(text, (100, 10))
 
     # place spirites
     all_sprites_list.draw(screen)
 
 
     pygame.display.flip()
-    clock.tick(FPS)
+    clock.tick(60)
 
-pygame.quit()
+drawLoading(screen)
+time.sleep(2)
+main_menu()
 
