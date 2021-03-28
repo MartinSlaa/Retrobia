@@ -32,9 +32,9 @@ Each watermelon eaten rewards you with 10 points. If the snake hits the edges of
 Bricks is based on the classic 1986 block breaker arcade game Breakout. The original game was developed and published by Atari. The game has had 
 many versions and remakes over the years including Arkanoid, Super Breakout, DXBALL, MEGABALL and many more. 
 
-From the main menu users can navigate up using the ↑ key and down using the ↓ key, and any of three options, **'START'**, **'HOW TO PLAY BRICKS'** and **'QUIT'** are selected with the *ENTER* key. Selecting start from the menu brings users to the game screen. 
+From the main menu users can navigate up using the '↑' key and down using the '↓' key, and any of three options, **'START'**, **'HOW TO PLAY BRICKS'** and **'QUIT'** are selected with the *ENTER* key. Selecting start from the menu brings users to the game screen. 
 
-To start the game press *SPACE*, the premise of the game is to control a paddle-like craft using the ← key to move left and the → to move 
+To start the game press *SPACE*, the premise of the game is to control a paddle-like craft using the '←' key to move left and the '→' to move 
 right. The concept is to maneuver the paddle horizontally and deflect the ball moving it upwards clearing layers of brick lines at the top half 
 of the screen and the goal is to remove all of the bricks. The ball moves around the screen based on how it connects with both paddle and bricks. 
 When it hits a brick, the ball bounces off the brick and the brick is destroyed. The player loses a life when the ball touches the area below the 
