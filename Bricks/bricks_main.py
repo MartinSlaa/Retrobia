@@ -1,19 +1,21 @@
 # Import the pygame library and start game
 import pygame
-import pygame.locals
+from pygame.locals import *
 import os
 import time
 import sys
-
+import mixer
 
 # import paddle class and ball class
 from paddle import Paddle
 from ball import Ball
 from brick import Brick
+#from score import highscore
 
 # INITIALIZE PYGAME
 pygame.init()
 pygame.font.init()
+pygame.mixer.init()
 
 # Center the Game Application
 os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -28,9 +30,17 @@ ORANGE = (255, 100, 0)
 YELLOW = (255, 255, 0)
 BRICK = (80, 25, 33)
 
-score = 0
-lives = 3
-#highscore = (highscore)
+def init_lives():
+    score = 0
+    lives = 3
+    return score, lives
+
+
+# Setting highscore
+highscore = 0
+file = open("./assets/score.txt", "r")
+content = file.read()
+
 # open a new window
 screen_width = 800
 screen_height = 600
@@ -43,14 +53,17 @@ pygame.display.set_caption("Bricks")
 # This will be a list that will contain all the sprites we intend to use in game
 all_sprites_list = pygame.sprite.Group()
 
-font = pygame.font.Font(None, 34)
-font1 = pygame.font.Font(None, 40)
-font3 = pygame.font.Font(None, 200)
-font4 = pygame.font.Font(None, 100)
-def highscore():
-    highscore > score
-# Draw loading screen
-def drawLoading(screen):
+font = pygame.font.SysFont('chalkduster', 120)
+font1 = pygame.font.SysFont(None, 40)
+font2 = pygame.font.SysFont(None, 30)
+font3 = pygame.font.SysFont('comicsansms', 30)
+
+#Sounds
+main_menu_theme = pygame.mixer.Sound('./assets/background.mp3') ##Credit to DonimikBraun @ freesound.org
+game_over_sound = pygame.mixer.Sound('./assets/game_over.mp3')  ##Credit to Baltiyar13 @ freesound.org
+level_complete = pygame.mixer.Sound('./assets/level_complete.mp3') ##Credit to ProjectsU012 @ freesound.org
+
+def draw_loading(screen):
     # Fill background
     screen.fill(BLACK)
 
@@ -78,37 +91,36 @@ def drawLoading(screen):
             pygame.quit()
             sys.exit(0)
 
+
 # TEXT RENDER
 def text_format(message, textFont, size, textColor):
     newText = textFont.render(message, size, textColor)
     return newText
 
-##GAME FONTS
-# font = 'Retro.ttf'
-
 def main_menu_menu(screen, font, selected):
-    screen.fill(DARKBLUE)
-    title = font3.render("BRICKS!", 1, YELLOW)
+    screen.fill(BRICK)
+    
+    title = font.render("BRICKS!", 1, YELLOW)
     if selected == 'start':
-        text_start = text_format('START', font, 75, WHITE)
+        text_start = text_format('START', font1, 1, WHITE)
     else:
-        text_start = text_format('START', font, 75, BLACK)
+        text_start = text_format('START', font1, 1, BLACK)
     if selected == 'quit':
-        text_quit = text_format('QUIT', font, 75, WHITE)
+        text_quit = text_format('QUIT', font1, 1, WHITE)
     else:
-        text_quit = text_format('QUIT', font, 75, BLACK)
+        text_quit = text_format('QUIT', font1, 1, BLACK)
     if selected == 'howto':
-        text_howto = text_format('HOW TO PLAY BRICKS', font, 75, WHITE)
+        text_howto = text_format('HOW TO PLAY BRICKS', font1, 1, WHITE)
     else:
-        text_howto = text_format('HOW TO PLAY BRICKS', font, 75, BLACK)
+        text_howto = text_format('HOW TO PLAY BRICKS', font1, 1, BLACK)
     return title, text_start, text_quit, text_howto
 
 
 def display_howto(screen, font):
     screen.fill(LIGHTBLUE)
-    title = text_format('HOW TO PLAY BRICKS', font4, 1, YELLOW)
-    howto = text_format('Move using left and right arrow, start game with SPACEBAR', font, 75, BLACK)
-    back = text_format('GO BACK', font, 75, BLACK)
+    title = text_format('HOW TO PLAY BRICKS', font1, 1, YELLOW)
+    howto = text_format('Move using left and right arrow, start game with SPACEBAR', font2, 75, BLACK)
+    back = text_format('GO BACK', font1, 75, BLACK)
     title_rect = title.get_rect()
     howto_rect = howto.get_rect()
     back_rect = back.get_rect()
@@ -117,11 +129,11 @@ def display_howto(screen, font):
         for event in pygame.event.get():  # user has done something
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:
-                    back = text_format('GO BACK', font, 75, WHITE)
+                    back = text_format('GO BACK', font1, 75, WHITE)
                     back_rect = back.get_rect()
                     go_back = True
                 if go_back and event.key == pygame.K_UP:
-                    back = text_format('GO BACK', font, 75, BLACK)
+                    back = text_format('GO BACK', font1, 75, BLACK)
                     back_rect = back.get_rect()
                     go_back = False
                 if go_back and event.key == pygame.K_RETURN:
@@ -135,6 +147,9 @@ def display_howto(screen, font):
 
 
 def main_menu():
+    #Sound played on game menu
+    pygame.mixer.Sound.play(main_menu_theme)
+
     menu = True
     selection = ['start', 'howto', 'quit']
     idx = 0
@@ -154,8 +169,9 @@ def main_menu():
                 selected = selection[idx]
                 if event.key == pygame.K_RETURN:
                     if selected == 'start':
-                        #print('start')
+                        # print('start')
                         menu = False
+                        main_menu_theme.stop()
                     elif selected == 'quit':
                         pygame.quit()
                         quit()
@@ -174,6 +190,111 @@ def main_menu():
         pygame.display.update()
         clock.tick(FPS)
 
+
+# Game Over Screen
+def game_over():
+    # if lives == 0:
+    screen.fill(DARKBLUE)
+    # Display game over message
+    game_over_message = font3.render('Game Over!', 1, WHITE)
+    font_pos_message = game_over_message.get_rect(center=(screen_width // 2, screen_height // 2))
+    # Your score message
+    game_over_score = font3.render(f'Your score was {score}', 1, WHITE)
+    font_pos_score = game_over_score.get_rect(center=(screen_width // 2, screen_height // 2 + 40))
+    # Message displaying current highscore
+    high_score = font3.render(f"Current Highscore is: {highscore}", 1, WHITE)
+    font_pos_highscore = high_score.get_rect(center=(screen_width // 2, screen_height // 2 + 80))
+    # Message displayed when highscore is beaten
+    beat_high_score = font3.render(f"New Highscore!", 1, WHITE)
+    font_pos_new_highscore = beat_high_score.get_rect(center=(screen_width // 2, screen_height // 2 + 80))
+    # Message displayed when highscore is tied
+    tie_score = font3.render(f"You tied with the Highscore!", 1, WHITE)
+    font_pos_tie_score = tie_score.get_rect(center=(screen_width // 2, screen_height // 2 + 80))
+    screen.blit(game_over_message, font_pos_message)
+    screen.blit(game_over_score, font_pos_score)
+    pygame.display.flip()
+    pygame.display.update()
+    #Sound played on game over screen
+    pygame.mixer.Sound.play(game_over_sound)
+    # When current score is higher than the high score
+    if score > highscore:
+        screen.blit(beat_high_score, font_pos_new_highscore)
+        with open("./assets/score.txt", "w") as f:
+            f.write(f"Current highscore is: {score}\n")
+            f.close()
+    # When current score is the same as the high score
+    if score == highscore:
+        screen.blit(tie_score, font_pos_tie_score)
+        with open("./assets/score.txt", "w") as f:
+            f.write(f"Your shared highscore is: {score}\n")
+            f.close()
+    # When current score is lower than the high score
+    if score < highscore:
+        screen.blit(high_score, font_pos_highscore)
+        pass
+    pygame.display.update()
+    pygame.time.wait(2000)
+    while True:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+            elif event.type == KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    return
+        pygame.display.update()
+
+def level_complete():
+    # if len(all_bricks) == 0:
+    screen.fill(DARKBLUE)
+    #Sound played for level complete:
+    #pygame.mixer.Sound.play(level_complete)
+    
+    # Display level complete message
+    level_complete_message = font3.render('CONGRATULATIONS! LEVEL COMPLETE!', 1, WHITE)
+    font_pos_message = level_complete_message.get_rect(center=(screen_width // 2, screen_height // 2))
+    # Your score message
+    level_complete_score = font3.render(f'Your score was {score}', 1, WHITE)
+    font_pos_score = level_complete_score.get_rect(center=(screen_width // 2, screen_height // 2 + 40))
+    # Message displaying current highscore
+    high_score = font3.render(f"Current Highscore is: {highscore}", 1, WHITE)
+    font_pos_highscore = high_score.get_rect(center=(screen_width // 2, screen_height // 2 + 80))
+    # Message displayed when highscore is beatenball.rect.y = 195
+    beat_high_score = font3.render(f"New Highscore!", 1, WHITE)
+    font_pos_new_highscore = beat_high_score.get_rect(center=(screen_width // 2, screen_height // 2 + 80))
+    # Message displayed when highscore is tied
+    tie_score = font3.render(f"You tied with the Highscore!", 1, WHITE)
+    font_pos_tie_score = tie_score.get_rect(center=(screen_width // 2, screen_height // 2 + 80))
+    screen.blit(level_complete_message, font_pos_message)   
+    screen.blit(level_complete_score, font_pos_score)
+    pygame.display.flip()
+    pygame.display.update()
+    # When current score is higher than the high score
+    if score > highscore:
+        screen.blit(beat_high_score, font_pos_new_highscore)
+        with open("score.txt", "w") as f:
+            f.write(f"Current highscore is: {score}\n")
+            f.close()
+    # When current score is the same as the high score
+    if score == highscore:
+        screen.blit(tie_score, font_pos_tie_score)
+        with open("score.txt", "w") as f:
+            f.write(f"Your shared highscore is: {score}\n")
+            f.close()
+    # When current score is lower than the high score
+    if score < highscore:
+        screen.blit(high_score, font_pos_highscore)
+        pass
+    pygame.display.update()
+    pygame.time.wait(2000)
+    while True:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+            elif event.type == KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    return
+        pygame.display.update()
+
 # List of sprites to be used in game
 all_sprites_list = pygame.sprite.Group()
 
@@ -182,7 +303,7 @@ paddle = Paddle(LIGHTBLUE, 100, 10)
 paddle.rect.x = 350
 paddle.rect.y = 560
 
-# create the ball sprite
+#Create the ball sprite
 ball = Ball(WHITE, 10, 10)
 ball.rect.x = 345
 ball.rect.y = 195
@@ -191,127 +312,121 @@ ball.moveToPaddle(paddle)
 all_bricks = pygame.sprite.Group()
 for i in range(7):
     brick = Brick(RED, 80, 30)
-    brick.rect.x = 60 + i * 100
+    brick.rect.x = 60 + i *100
     brick.rect.y = 60
     all_sprites_list.add(brick)
     all_bricks.add(brick)
 for i in range(7):
     brick = Brick(ORANGE, 80, 30)
-    brick.rect.x = 60 + i * 100
+    brick.rect.x = 60 + i *100
     brick.rect.y = 100
     all_sprites_list.add(brick)
     all_bricks.add(brick)
 for i in range(7):
     brick = Brick(YELLOW, 80, 30)
-    brick.rect.x = 60 + i * 100
+    brick.rect.x = 60 + i *100
     brick.rect.y = 140
     all_sprites_list.add(brick)
     all_bricks.add(brick)
 
-# Add paddle to the list of sprites
+#Add paddle to the list of sprites
 all_sprites_list.add(paddle)
 all_sprites_list.add(ball)
 
-# Loading screen
-drawLoading(screen)
-
-# Game loop will run until player/user exits game
-carryOn = True
-
-# Game clock will be used to control how quickly the screen updates
+#Game clock will be used to control how quickly the screen updates
 clock = pygame.time.Clock()
 
-main_menu()
+#Main PROGRAM LOOP
 
-# MAIN PROGRAM LOOP
+while True:
+    time.sleep(2)
+    draw_loading(screen)
+    main_menu()
+    carryOn = True
+    score, lives = init_lives()
 
-while carryOn:
+    while carryOn:
 
-    # MAIN EVENT LOOP
-    for event in pygame.event.get():
-        if event.type == pygame.locals.QUIT:
-            carryOn = False
-    # Moving the paddle
-    # def moving_paddle():
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
-        paddle.moveLeft(5)
-    if not ball.moving:
-            ball.moveToPaddle(paddle)
-    if keys[pygame.K_RIGHT]:
-        paddle.moveRight(5)
+        # MAIN EVENT LOOP
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+        # Moving the paddle
+        # def moving_paddle():
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            paddle.moveLeft(5)
         if not ball.moving:
             ball.moveToPaddle(paddle)
-    if not ball.moving and keys[pygame.K_SPACE]:
-        ball.move()
+        if keys[pygame.K_RIGHT]:
+            paddle.moveRight(5)
+            if not ball.moving:
+                ball.moveToPaddle(paddle)
+        if not ball.moving and keys[pygame.K_SPACE]:
+            ball.move()
 
-    # game logic
-    all_sprites_list.update()
+        # game logic
+        all_sprites_list.update()
 
-    # Check if the ball is bouncing against any of the 4 walls:
-    if ball.rect.x >= 790:
-        ball.velocity[0] = -ball.velocity[0]
-    if ball.rect.x <= 0:
-        ball.velocity[0] = -ball.velocity[0]
-    if ball.rect.y > 590:
-        ball.stop()
-        ball.moveToPaddle(paddle)
-        lives -= 1
+        # Check if the ball is bouncing against any of the 4 walls:
+        if ball.rect.x >= 790:
+            ball.velocity[0] = -ball.velocity[0]
+        if ball.rect.x <= 0:
+            ball.velocity[0] = -ball.velocity[0]
+        if ball.rect.y > 590:
+            ball.stop()
+            ball.moveToPaddle(paddle)
+            lives -= 1
         if lives == 0:
-# Display Game Over Message for 3 seconds
-            font1 = pygame.font.Font(None, 50)
-            text = font1.render("GAME OVER! PLAY AGAIN?", 1, WHITE)
-            screen.blit(text, (175, 300))
-            pygame.display.flip()
-            pygame.time.wait(5000)
-
-    if ball.rect.y < 40:
-        ball.velocity[1] = -ball.velocity[1]
-
-    # Detect collisions between the ball and the paddle
-    if pygame.sprite.collide_mask(ball, paddle):
-        ball.rect.x -= ball.velocity[0]
-        ball.rect.y -= ball.velocity[1]
-        ball.bounce()
-
-        # Check if there is the ball collides with any bricks
-    brick_collision_list = pygame.sprite.spritecollide(ball, all_bricks, False)
-    for brick in brick_collision_list:
-        ball.bounce()
-        score += 10
-        brick.kill()
-        if len(all_bricks) == 0:
-            # Display level complete message for 3 seconds
-            font1 = pygame.font.Font(None, 50)
-            text = font1.render('LEVEL COMPLETE', 1, WHITE)
-            screen.blit(text, (260, 300))
-            pygame.display.flip()
-            pygame.time.wait(3000)
-
-
-            # stop the game
+            game_over()
             carryOn = True
+            break
 
-    # clear screen to dark blue
-    screen.fill(DARKBLUE)
-    pygame.draw.line(screen, WHITE, [0, 38], [800, 38], 2)
+        if ball.rect.y < 40:
+            ball.velocity[1] = -ball.velocity[1]
 
-    # Display score and lives at the top of the game screen
-    text = font.render("Score: " + str(score), 1, WHITE)
-    screen.blit(text, (20, 10))
-    text = font.render("Lives: " + str(lives), 1, WHITE)
-    screen.blit(text, (650, 10))
-    #text = font.render("High Score: " + str(highscore), 1, WHITE)
-    #screen.blitt(text, (100, 10))
+        # Detect collisions between the ball and the paddle
+        if pygame.sprite.collide_mask(ball, paddle):
+            ball.rect.x -= ball.velocity[0]
+            ball.rect.y -= ball.velocity[1]
+            ball.bounce()
 
-    # place spirites
-    all_sprites_list.draw(screen)
+            # Check if there is the ball collides with any bricks
+        brick_collision_list = pygame.sprite.spritecollide(ball, all_bricks, False)
+        for brick in brick_collision_list:
+            ball.bounce()
+            score += 10
+            brick.kill()
 
+            highscore = 0
+            file = open('./assets/score.txt', 'r')
+            content = file.read()
 
-    pygame.display.flip()
-    clock.tick(60)
+            x = content.split()
+            for i in x:
+                if i.isdigit():
+                    highscore = int(i)
 
-drawLoading(screen)
-time.sleep(2)
-main_menu()
+            if len(all_bricks) == 0:
+                # Display level complete message for 3 seconds
+                level_complete()
 
+            pygame.display.update()
+
+        # clear screen to dark blue
+        screen.fill(DARKBLUE)
+        pygame.draw.line(screen, WHITE, [0, 38], [800, 38], 2)
+
+        # Display score and lives at the top of the game screen
+        text = font1.render("Score: " + str(score), 1, WHITE)
+        screen.blit(text, (20, 10))
+        text = font1.render("Lives: " + str(lives), 1, WHITE)
+        screen.blit(text, (650, 10))
+        #text = font1.render("High Score: " + str(), 1, WHITE)
+        #screen.blit(text, (300, 10))
+
+        # place spirites
+        all_sprites_list.draw(screen)
+
+        pygame.display.flip()
+        clock.tick(FPS)
