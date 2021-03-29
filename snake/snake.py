@@ -54,11 +54,11 @@ WATERMELON_SLICE = pygame.image.load("snake/assets/watermelon-slice.png")
 WATERMELON_SLICE = pygame.transform.smoothscale(WATERMELON_SLICE, (100, 100))
 
 # Sounds and sound effects
-fruit_sound = pygame.mixer.Sound("snake/assets/watermelon-seed.wav")
+fruit_sound = pygame.mixer.Sound("snake/assets/watermelon-seed.wav")    # Credit to Breviceps @freesound.org
 #fruit_sound = pygame.mixer.Sound(os.path.join('assets', 'watermelon-seed.wav'))
-game_over_sound= pygame.mixer.Sound("snake/assets/game-over.wav")
+game_over_sound= pygame.mixer.Sound("snake/assets/game-over.wav")       # Credit to myfox14 @freesound.org
 #game_over_sound = pygame.mixer.Sound(os.path.join('assets', 'game-over.wav'))
-click_sound= pygame.mixer.Sound("snake/assets/retro-click.wav")
+click_sound= pygame.mixer.Sound("snake/assets/retro-click.wav")         # Credit to https://mixkit.co/free-sound-effects/click/, free to use under the Mixkit License
 #click_sound = pygame.mixer.Sound(os.path.join('assets', 'retro-click.wav'))
 
 
