@@ -4,18 +4,16 @@ from pygame.locals import *
 import os
 import time
 import sys
-import mixer
 
 # import paddle class and ball class
 from paddle import Paddle
 from ball import Ball
 from brick import Brick
-#from score import highscore
 
 # INITIALIZE PYGAME
 pygame.init()
 pygame.font.init()
-pygame.mixer.init()
+# pygame.mixer.init()
 
 # Center the Game Application
 os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -29,6 +27,7 @@ RED = (255, 0, 0)
 ORANGE = (255, 100, 0)
 YELLOW = (255, 255, 0)
 BRICK = (80, 25, 33)
+
 
 def init_lives():
     score = 0
@@ -50,6 +49,9 @@ FPS = 80
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Bricks")
 
+# List of sprites to be used in game
+all_bricks = pygame.sprite.Group()
+
 # This will be a list that will contain all the sprites we intend to use in game
 all_sprites_list = pygame.sprite.Group()
 
@@ -58,10 +60,12 @@ font1 = pygame.font.SysFont(None, 40)
 font2 = pygame.font.SysFont(None, 30)
 font3 = pygame.font.SysFont('comicsansms', 30)
 
-#Sounds
-main_menu_theme = pygame.mixer.Sound('./assets/background.mp3') ##Credit to DonimikBraun @ freesound.org
+
+# Sounds
+main_menu_theme = pygame.mixer.Sound('assets/background.mp3')  ##Credit to DonimikBraun @ freesound.org
 game_over_sound = pygame.mixer.Sound('./assets/game_over.mp3')  ##Credit to Baltiyar13 @ freesound.org
-level_complete = pygame.mixer.Sound('./assets/level_complete.mp3') ##Credit to ProjectsU012 @ freesound.org
+level_complete = pygame.mixer.Sound('./assets/level_complete.mp3')  ##Credit to ProjectsU012 @ freesound.org
+
 
 def draw_loading(screen):
     # Fill background
@@ -97,9 +101,10 @@ def text_format(message, textFont, size, textColor):
     newText = textFont.render(message, size, textColor)
     return newText
 
+
 def main_menu_menu(screen, font, selected):
     screen.fill(BRICK)
-    
+
     title = font.render("BRICKS!", 1, YELLOW)
     if selected == 'start':
         text_start = text_format('START', font1, 1, WHITE)
@@ -147,7 +152,7 @@ def display_howto(screen, font):
 
 
 def main_menu():
-    #Sound played on game menu
+    # Sound played on game menu
     pygame.mixer.Sound.play(main_menu_theme)
 
     menu = True
@@ -196,7 +201,7 @@ def game_over():
     # if lives == 0:
     screen.fill(DARKBLUE)
     # Display game over message
-    game_over_message = font3.render('Game Over!', 1, WHITE)
+    game_over_message = font3.render('Game Over! Press Enter to play again!', 1, WHITE)
     font_pos_message = game_over_message.get_rect(center=(screen_width // 2, screen_height // 2))
     # Your score message
     game_over_score = font3.render(f'Your score was {score}', 1, WHITE)
@@ -214,7 +219,7 @@ def game_over():
     screen.blit(game_over_score, font_pos_score)
     pygame.display.flip()
     pygame.display.update()
-    #Sound played on game over screen
+    # Sound played on game over screen
     pygame.mixer.Sound.play(game_over_sound)
     # When current score is higher than the high score
     if score > highscore:
@@ -243,14 +248,15 @@ def game_over():
                     return
         pygame.display.update()
 
+
 def level_complete():
     # if len(all_bricks) == 0:
     screen.fill(DARKBLUE)
-    #Sound played for level complete:
-    #pygame.mixer.Sound.play(level_complete)
-    
+    # Sound played for level complete:
+    # pygame.mixer.Sound.play(level_complete)
+
     # Display level complete message
-    level_complete_message = font3.render('CONGRATULATIONS! LEVEL COMPLETE!', 1, WHITE)
+    level_complete_message = font3.render('LEVEL COMPLETE! PRESS ENTER TO PLAY AGAIN!', 1, WHITE)
     font_pos_message = level_complete_message.get_rect(center=(screen_width // 2, screen_height // 2))
     # Your score message
     level_complete_score = font3.render(f'Your score was {score}', 1, WHITE)
@@ -264,7 +270,7 @@ def level_complete():
     # Message displayed when highscore is tied
     tie_score = font3.render(f"You tied with the Highscore!", 1, WHITE)
     font_pos_tie_score = tie_score.get_rect(center=(screen_width // 2, screen_height // 2 + 80))
-    screen.blit(level_complete_message, font_pos_message)   
+    screen.blit(level_complete_message, font_pos_message)
     screen.blit(level_complete_score, font_pos_score)
     pygame.display.flip()
     pygame.display.update()
@@ -295,6 +301,7 @@ def level_complete():
                     return
         pygame.display.update()
 
+
 # List of sprites to be used in game
 all_sprites_list = pygame.sprite.Group()
 
@@ -303,47 +310,56 @@ paddle = Paddle(LIGHTBLUE, 100, 10)
 paddle.rect.x = 350
 paddle.rect.y = 560
 
-#Create the ball sprite
+# Create the ball sprite
 ball = Ball(WHITE, 10, 10)
 ball.rect.x = 345
 ball.rect.y = 195
 ball.moveToPaddle(paddle)
 
-all_bricks = pygame.sprite.Group()
-for i in range(7):
-    brick = Brick(RED, 80, 30)
-    brick.rect.x = 60 + i *100
-    brick.rect.y = 60
-    all_sprites_list.add(brick)
-    all_bricks.add(brick)
-for i in range(7):
-    brick = Brick(ORANGE, 80, 30)
-    brick.rect.x = 60 + i *100
-    brick.rect.y = 100
-    all_sprites_list.add(brick)
-    all_bricks.add(brick)
-for i in range(7):
-    brick = Brick(YELLOW, 80, 30)
-    brick.rect.x = 60 + i *100
-    brick.rect.y = 140
-    all_sprites_list.add(brick)
-    all_bricks.add(brick)
 
-#Add paddle to the list of sprites
+def build_bricks(all_bricks):
+    BRICKS_NUMBER = 21
+    if len(all_bricks) == BRICKS_NUMBER:
+        return
+    all_bricks.empty()
+    for i in range(7):
+        brick = Brick(RED, 80, 30)
+        brick.rect.x = 60 + i * 100
+        brick.rect.y = 60
+        all_bricks.add(brick)
+    for i in range(7):
+        brick = Brick(ORANGE, 80, 30)
+        brick.rect.x = 60 + i * 100
+        brick.rect.y = 100
+        all_bricks.add(brick)
+    for i in range(7):
+        brick = Brick(YELLOW, 80, 30)
+        brick.rect.x = 60 + i * 100
+        brick.rect.y = 140
+        all_bricks.add(brick)
+
+
+# Add paddle to the list of sprites
 all_sprites_list.add(paddle)
 all_sprites_list.add(ball)
+build_bricks(all_bricks)
 
-#Game clock will be used to control how quickly the screen updates
+# Game clock will be used to control how quickly the screen updates
 clock = pygame.time.Clock()
-
-#Main PROGRAM LOOP
+level = 1
+level_up = False
+# Main PROGRAM LOOP
 
 while True:
-    time.sleep(2)
-    draw_loading(screen)
-    main_menu()
+
+    if not level_up:
+        draw_loading(screen)
+        main_menu()
+        score, lives = init_lives()
+    else:
+        level_up = False
     carryOn = True
-    score, lives = init_lives()
+    build_bricks(all_bricks)
 
     while carryOn:
 
@@ -379,7 +395,7 @@ while True:
             lives -= 1
         if lives == 0:
             game_over()
-            carryOn = True
+            level_up = False
             break
 
         if ball.rect.y < 40:
@@ -410,6 +426,10 @@ while True:
             if len(all_bricks) == 0:
                 # Display level complete message for 3 seconds
                 level_complete()
+                level += 1
+                level_up = True
+                carryOn = False
+                ball.moveToPaddle(paddle)
 
             pygame.display.update()
 
@@ -422,11 +442,12 @@ while True:
         screen.blit(text, (20, 10))
         text = font1.render("Lives: " + str(lives), 1, WHITE)
         screen.blit(text, (650, 10))
-        #text = font1.render("High Score: " + str(), 1, WHITE)
-        #screen.blit(text, (300, 10))
+        # text = font1.render("High Score: " + str(), 1, WHITE)
+        # screen.blit(text, (300, 10))
 
         # place spirites
         all_sprites_list.draw(screen)
+        all_bricks.draw(screen)
 
         pygame.display.flip()
         clock.tick(FPS)
