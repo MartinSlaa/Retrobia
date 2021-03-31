@@ -1,1 +1,1 @@
-Your shared highscore is: 200
+Current highscore is: 620

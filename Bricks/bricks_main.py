@@ -44,7 +44,7 @@ content = file.read()
 screen_width = 800
 screen_height = 600
 size = (screen_width, screen_height)
-FPS = 80
+FPS = 60
 
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Bricks")
@@ -64,7 +64,7 @@ font3 = pygame.font.SysFont('comicsansms', 30)
 # Sounds
 main_menu_theme = pygame.mixer.Sound('assets/background.mp3')  ##Credit to DonimikBraun @ freesound.org
 game_over_sound = pygame.mixer.Sound('./assets/game_over.mp3')  ##Credit to Baltiyar13 @ freesound.org
-level_complete = pygame.mixer.Sound('./assets/level_complete.mp3')  ##Credit to ProjectsU012 @ freesound.org
+level_complete_sound = pygame.mixer.Sound('./assets/level_complete.mp3')  ##Credit to ProjectsU012 @ freesound.org
 
 
 def draw_loading(screen):
@@ -176,7 +176,7 @@ def main_menu():
                     if selected == 'start':
                         # print('start')
                         menu = False
-                        main_menu_theme.stop()
+                        main_menu_theme.fadeout(1000)
                     elif selected == 'quit':
                         pygame.quit()
                         quit()
@@ -252,44 +252,15 @@ def game_over():
 def level_complete():
     # if len(all_bricks) == 0:
     screen.fill(DARKBLUE)
+
     # Sound played for level complete:
-    # pygame.mixer.Sound.play(level_complete)
+    pygame.mixer.Sound.play(level_complete_sound)
 
     # Display level complete message
-    level_complete_message = font3.render('LEVEL COMPLETE! PRESS ENTER TO PLAY AGAIN!', 1, WHITE)
+    level_complete_message = font2.render('LEVEL COMPLETE! PRESS ENTER TO PLAY THE NEXT LEVEL', 1, WHITE)
     font_pos_message = level_complete_message.get_rect(center=(screen_width // 2, screen_height // 2))
-    # Your score message
-    level_complete_score = font3.render(f'Your score was {score}', 1, WHITE)
-    font_pos_score = level_complete_score.get_rect(center=(screen_width // 2, screen_height // 2 + 40))
-    # Message displaying current highscore
-    high_score = font3.render(f"Current Highscore is: {highscore}", 1, WHITE)
-    font_pos_highscore = high_score.get_rect(center=(screen_width // 2, screen_height // 2 + 80))
-    # Message displayed when highscore is beatenball.rect.y = 195
-    beat_high_score = font3.render(f"New Highscore!", 1, WHITE)
-    font_pos_new_highscore = beat_high_score.get_rect(center=(screen_width // 2, screen_height // 2 + 80))
-    # Message displayed when highscore is tied
-    tie_score = font3.render(f"You tied with the Highscore!", 1, WHITE)
-    font_pos_tie_score = tie_score.get_rect(center=(screen_width // 2, screen_height // 2 + 80))
     screen.blit(level_complete_message, font_pos_message)
-    screen.blit(level_complete_score, font_pos_score)
     pygame.display.flip()
-    pygame.display.update()
-    # When current score is higher than the high score
-    if score > highscore:
-        screen.blit(beat_high_score, font_pos_new_highscore)
-        with open("score.txt", "w") as f:
-            f.write(f"Current highscore is: {score}\n")
-            f.close()
-    # When current score is the same as the high score
-    if score == highscore:
-        screen.blit(tie_score, font_pos_tie_score)
-        with open("score.txt", "w") as f:
-            f.write(f"Your shared highscore is: {score}\n")
-            f.close()
-    # When current score is lower than the high score
-    if score < highscore:
-        screen.blit(high_score, font_pos_highscore)
-        pass
     pygame.display.update()
     pygame.time.wait(2000)
     while True:
