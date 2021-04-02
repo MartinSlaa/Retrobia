@@ -9,6 +9,7 @@ import sys
 from paddle import Paddle
 from ball import Ball
 from brick import Brick
+from levelbuilder import *
 
 # INITIALIZE PYGAME
 pygame.init()
@@ -31,7 +32,7 @@ BRICK = (80, 25, 33)
 
 def init_lives():
     score = 0
-    lives = 3
+    lives = 100
     return score, lives
 
 
@@ -125,30 +126,41 @@ def display_howto(screen, font):
     screen.fill(LIGHTBLUE)
     title = text_format('HOW TO PLAY BRICKS', font1, 1, YELLOW)
     howto = text_format('Move using left and right arrow, start game with SPACEBAR', font2, 75, BLACK)
-    back = text_format('GO BACK', font1, 75, BLACK)
+    back1 = text_format('GO', font1, 75, BLACK)
+    back2 = text_format('BACK', font1, 75, BLACK)
     title_rect = title.get_rect()
     howto_rect = howto.get_rect()
-    back_rect = back.get_rect()
+    back1_rect = back1.get_rect()
+    back2_rect = back2.get_rect()
     go_back = False
     while True:
         for event in pygame.event.get():  # user has done something
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:
-                    back = text_format('GO BACK', font1, 75, WHITE)
-                    back_rect = back.get_rect()
+                    back1 = text_format('GO', font1, 75, WHITE)
+                    back2 = text_format('BACK', font1, 75, WHITE)
+                    back1_rect = back1.get_rect()
+                    back2_rect = back2.get_rect()
                     go_back = True
                 if go_back and event.key == pygame.K_UP:
-                    back = text_format('GO BACK', font1, 75, BLACK)
-                    back_rect = back.get_rect()
+                    back1 = text_format('GO', font1, 75, BLACK)
+                    back2 = text_format('BACK', font1, 75, BLACK)
+                    back1_rect = back1.get_rect()
+                    back2_rect = back2.get_rect()
                     go_back = False
                 if go_back and event.key == pygame.K_RETURN:
                     return
 
         screen.blit(title, (screen_width / 2 - (title_rect[2] / 2), 80))
         screen.blit(howto, (screen_width / 2 - (howto_rect[2] / 2), 240))
-        screen.blit(back, (screen_width / 2 - (back_rect[2] / 2), 400))
+        screen.blit(back1, (screen_width / 2 - (back1_rect[2] / 2), 400))
+        screen.blit(back2, (screen_width / 2 - (back2_rect[2] / 2), 440))
         pygame.display.update()
         clock.tick(FPS)
+
 
 
 def main_menu():
@@ -287,29 +299,6 @@ ball.rect.x = 345
 ball.rect.y = 195
 ball.moveToPaddle(paddle)
 
-
-def build_bricks(all_bricks):
-    BRICKS_NUMBER = 21
-    if len(all_bricks) == BRICKS_NUMBER:
-        return
-    all_bricks.empty()
-    for i in range(7):
-        brick = Brick(RED, 80, 30)
-        brick.rect.x = 60 + i * 100
-        brick.rect.y = 60
-        all_bricks.add(brick)
-    for i in range(7):
-        brick = Brick(ORANGE, 80, 30)
-        brick.rect.x = 60 + i * 100
-        brick.rect.y = 100
-        all_bricks.add(brick)
-    for i in range(7):
-        brick = Brick(YELLOW, 80, 30)
-        brick.rect.x = 60 + i * 100
-        brick.rect.y = 140
-        all_bricks.add(brick)
-
-
 # Add paddle to the list of sprites
 all_sprites_list.add(paddle)
 all_sprites_list.add(ball)
@@ -330,7 +319,7 @@ while True:
     else:
         level_up = False
     carryOn = True
-    build_bricks(all_bricks)
+    build_bricks(all_bricks, level)
 
     while carryOn:
 
@@ -367,6 +356,7 @@ while True:
         if lives == 0:
             game_over()
             level_up = False
+            level = 1
             break
 
         if ball.rect.y < 40:
