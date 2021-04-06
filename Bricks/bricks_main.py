@@ -191,7 +191,7 @@ def main_menu():
                     if selected == 'start':
                         # print('start')
                         menu = False
-                        main_menu_theme.fadeout(1000)
+                        #main_menu_theme.fadeout(1000)
                     elif selected == 'quit':
                         pygame.quit()
                         quit()
