@@ -64,9 +64,9 @@ font3 = pygame.font.SysFont('comicsansms', 30)
 
 
 # Sounds
-main_menu_theme = pygame.mixer.Sound('Bricks/assets/background.wav')  ##Credit to DonimikBraun @ freesound.org
-game_over_sound = pygame.mixer.Sound('Bricks/assets/game_over.wav')  ##Credit to Baltiyar13 @ freesound.org
-level_complete_sound = pygame.mixer.Sound('Bricks/assets/level_complete.wav')  ##Credit to ProjectsU012 @ freesound.org
+main_menu_theme = pygame.mixer.Sound("Bricks/assets/background.wav")  ##Credit to DonimikBraun @ freesound.org
+game_over_sound = pygame.mixer.Sound("Bricks/assets/game_over.wav")  ##Credit to Baltiyar13 @ freesound.org
+level_complete_sound = pygame.mixer.Sound("Bricks/assets/level_complete.wav")  ##Credit to ProjectsU012 @ freesound.org
 
 
 def draw_loading(screen):
