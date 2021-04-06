@@ -229,7 +229,7 @@ def main():
 
     # Setting highscore
     highscore = 0
-    file = open("invaders\score.txt", "r")
+    file = open("invaders/score.txt", "r")
     content = file.read()
 
     # Getting highscore from text file and convert the string to integer
@@ -270,12 +270,12 @@ def main():
             # Highscore logic, check if new highscore, equal highscore or not highscore
             if score > highscore:
                 WIN.blit(beat_high_score_label, (200, 600))
-                with open("invaders\score.txt", "w") as f:
+                with open("invaders/score.txt", "w") as f:
                     f.write(f"Current highscore is: {score}\n")
                     f.close()
             if score == highscore:
                 WIN.blit(tie_score_label, (100, 600))
-                with open("invaders\score.txt", "w") as f:
+                with open("invaders/score.txt", "w") as f:
                     f.write(f"Your shared highscore is: {score}\n")
                     f.close()
             if score < highscore:
