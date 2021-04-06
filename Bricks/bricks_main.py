@@ -28,6 +28,7 @@ RED = (255, 0, 0)
 ORANGE = (255, 100, 0)
 YELLOW = (255, 255, 0)
 BRICK = (80, 25, 33)
+BGCOLOR = (32, 32, 32)
 
 
 def init_lives():
@@ -70,15 +71,15 @@ level_complete_sound = pygame.mixer.Sound('Bricks/assets/level_complete.mp3')  #
 
 def draw_loading(screen):
     # Fill background
-    screen.fill(BLACK)
+    screen.fill(BGCOLOR)
 
     # Display logo
-    LOGO = pygame.image.load('Bricks/assets/logo.png').convert()
+    LOGO = pygame.image.load('Bricks/assets/logo.png')
     screen.blit(LOGO, (300, 100))
 
     font1 = pygame.font.Font(None, 74)
     text = font1.render("Loading...", 1, WHITE)
-    screen.blit(text, (300, 450))
+    screen.blit(text, (290, 450))
 
     # Update screen
     pygame.display.update()
