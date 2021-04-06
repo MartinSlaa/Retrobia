@@ -14,7 +14,9 @@ from levelbuilder import *
 # INITIALIZE PYGAME
 pygame.init()
 pygame.font.init()
-pygame.mixer.init()
+
+
+# pygame.mixer.init()
 
 # Center the Game Application
 os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -64,9 +66,9 @@ font3 = pygame.font.SysFont('comicsansms', 30)
 
 
 # Sounds
-main_menu_theme = pygame.mixer.Sound("Bricks/assets/background.wav")  ##Credit to DonimikBraun @ freesound.org
-game_over_sound = pygame.mixer.Sound("Bricks/assets/game_over.wav")  ##Credit to Baltiyar13 @ freesound.org
-level_complete_sound = pygame.mixer.Sound("Bricks/assets/level_complete.wav")  ##Credit to ProjectsU012 @ freesound.org
+#main_menu_theme = pygame.mixer.Sound("Bricks/assets/background.wav")  ##Credit to DonimikBraun @ freesound.org
+#game_over_sound = pygame.mixer.Sound("Bricks/assets/game_over.wav")  ##Credit to Baltiyar13 @ freesound.org
+#level_complete_sound = pygame.mixer.Sound("Bricks/assets/level_complete.wav")  ##Credit to ProjectsU012 @ freesound.org
 
 
 def draw_loading(screen):
@@ -166,7 +168,7 @@ def display_howto(screen, font):
 
 def main_menu():
     # Sound played on game menu
-    pygame.mixer.Sound.play(main_menu_theme)
+    #pygame.mixer.Sound.play(main_menu_theme)
 
     menu = True
     selection = ['start', 'howto', 'quit']
@@ -233,7 +235,7 @@ def game_over():
     pygame.display.flip()
     pygame.display.update()
     # Sound played on game over screen
-    pygame.mixer.Sound.play(game_over_sound)
+    #pygame.mixer.Sound.play(game_over_sound)
     # When current score is higher than the high score
     if score > highscore:
         screen.blit(beat_high_score, font_pos_new_highscore)
@@ -267,7 +269,7 @@ def level_complete():
     screen.fill(DARKBLUE)
 
     # Sound played for level complete:
-    pygame.mixer.Sound.play(level_complete_sound)
+    #pygame.mixer.Sound.play(level_complete_sound)
 
     # Display level complete message
     level_complete_message = font2.render('LEVEL COMPLETE! PRESS ENTER TO PLAY THE NEXT LEVEL', 1, WHITE)
