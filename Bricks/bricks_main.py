@@ -14,7 +14,7 @@ from levelbuilder import *
 # INITIALIZE PYGAME
 pygame.init()
 pygame.font.init()
-# pygame.mixer.init()
+pygame.mixer.init()
 
 # Center the Game Application
 os.environ['SDL_VIDEO_CENTERED'] = '1'
