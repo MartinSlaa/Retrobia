@@ -37,28 +37,35 @@ def drawLoading():
     pygame.display.update()
 
 # Load images of enemy ships
+
+# BOSS_SHIP, ENEMYS_SHIP_1, ENEMY_SHIP 2 credit: “Part2Art.com with Skorpio’s 2nd kit”,
+# by Skorpio and Wubitog, licensed by CC-BY-SA 3.0: https://opengameart.org/content/part2artcom-with-skorpios-2nd-kit
+
 BOSS_SHIP = pygame.image.load("invaders/assets/boss_ship.png")
-#BOSS_SHIP = pygame.image.load(os.path.join("assets", "boss_ship.png"))
+# BOSS_SHIP = pygame.image.load(os.path.join("assets", "boss_ship.png"))
+
 ENEMY_SHIP_1 = pygame.image.load("invaders/assets/enemy_ship1.png")
-#ENEMY_SHIP_1 = pygame.image.load(os.path.join("assets", "enemy_ship1.png"))
+# ENEMY_SHIP_1 = pygame.image.load(os.path.join("assets", "enemy_ship1.png"))
 ENEMY_SHIP_2 = pygame.image.load("invaders/assets/enemy_ship2.png")
-#ENEMY_SHIP_2 = pygame.image.load(os.path.join("assets", "enemy_ship2.png"))
+# ENEMY_SHIP_2 = pygame.image.load(os.path.join("assets", "enemy_ship2.png"))
 
 # load image of player ship
+# FIGHTER_SHIP Credit: “Transforming Fighter Ship #1” by clayster2012,
+# licensed CC-BY 4.0, CC-BY-SA 4.0:  https://opengameart.org/content/transforming-fighter-ship-1
 FIGHTER_SHIP = pygame.image.load("invaders/assets/fighter_ship.png")
-#FIGHTER_SHIP = pygame.image.load(os.path.join("assets", "fighter_ship.png"))
+# FIGHTER_SHIP = pygame.image.load(os.path.join("assets", "fighter_ship.png"))
 
 # Loading background image
 BACKGROUND = pygame.transform.scale(pygame.image.load("invaders/assets/blueNebula_1.png"), (WIDTH, HEIGHT))
-#BACKGROUND = pygame.transform.scale(pygame.image.load(os.path.join("assets", "blueNebula_1.png")), (WIDTH, HEIGHT))
+# BACKGROUND = pygame.transform.scale(pygame.image.load(os.path.join("assets", "blueNebula_1.png")), (WIDTH, HEIGHT))
 
 # Load lasers image
 BOLT_LASER_BLUE = pygame.image.load("invaders/assets/blasterbolt.png")
-#BOLT_LASER_BLUE = pygame.image.load(os.path.join("assets", "blasterbolt.png"))
+# BOLT_LASER_BLUE = pygame.image.load(os.path.join("assets", "blasterbolt.png"))
 
 # Load Retrobia Logo
 LOGO = pygame.image.load("invaders/assets/logo.png")
-#LOGO = pygame.image.load(os.path.join("assets", "logo.png"))
+# LOGO = pygame.image.load(os.path.join("assets", "logo.png"))
 
 
 class Ship:
